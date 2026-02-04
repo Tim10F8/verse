@@ -15,6 +15,7 @@ This document outlines a comprehensive plan to build **Verse**, a modern web int
 ## Current State Analysis
 
 ### Technology Stack (Legacy)
+
 - **Frontend**: Backbone.js + Marionette.js
 - **Language**: CoffeeScript
 - **Templating**: ECO templates
@@ -25,6 +26,7 @@ This document outlines a comprehensive plan to build **Verse**, a modern web int
 ### Existing Features
 
 #### Core Media Management
+
 1. **Music Library**
    - Artists, Albums, Songs browsing
    - Genre filtering and sorting
@@ -47,6 +49,7 @@ This document outlines a comprehensive plan to build **Verse**, a modern web int
    - Add-on settings configuration
 
 #### Playback & Control
+
 1. **Dual Player Mode**
    - Kodi mode (remote control)
    - Local mode (browser streaming)
@@ -63,6 +66,7 @@ This document outlines a comprehensive plan to build **Verse**, a modern web int
    - VLC plugin fallback support
 
 #### User Interface
+
 1. **Search**
    - Global search across all media types
    - Search index with caching
@@ -91,6 +95,7 @@ This document outlines a comprehensive plan to build **Verse**, a modern web int
    - API browser ("The Lab")
 
 #### Technical Features
+
 1. **Data Management**
    - Backbone fetchCache for collection caching
    - localStorage for settings persistence
@@ -110,6 +115,7 @@ This document outlines a comprehensive plan to build **Verse**, a modern web int
 The application communicates with Kodi via JSON-RPC 2.0:
 
 **Pattern**:
+
 ```javascript
 {
   jsonrpc: "2.0",
@@ -124,6 +130,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
 ```
 
 **Key API Namespaces**:
+
 - `AudioLibrary.*` - Music management
 - `VideoLibrary.*` - Movies, TV shows
 - `Player.*` - Playback control
@@ -141,6 +148,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
 ### Core Technologies
 
 #### Framework & Language
+
 - **React 18+** with TypeScript
   - Mature, widely adopted
   - Large community and contributor base
@@ -148,6 +156,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
   - Server components support for future optimization
 
 #### Build & Development
+
 - **Vite**
   - Lightning-fast HMR
   - Optimized production builds
@@ -155,6 +164,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
   - Native ESM support
 
 #### Styling
+
 - **Tailwind CSS**
   - Rapid UI development
   - Utility-first approach
@@ -162,6 +172,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
   - Highly customizable design system
 
 #### UI Components
+
 - **shadcn/ui** (Radix UI primitives)
   - Accessible by default (WCAG AA)
   - Fully customizable
@@ -171,6 +182,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
 ### State & Data Management
 
 #### API Layer
+
 - **TanStack Query (React Query)**
   - Automatic caching and invalidation
   - Optimistic updates
@@ -179,6 +191,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
   - Perfect for JSON-RPC pattern
 
 #### Client State
+
 - **Zustand**
   - Simple, lightweight (1.2kb)
   - No boilerplate
@@ -186,6 +199,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
   - TypeScript-first
 
 #### Real-time Communication
+
 - **Native WebSocket** with automatic reconnection
 - **Polling fallback** for degraded networks
 - TanStack Query integration for cache invalidation
@@ -193,30 +207,35 @@ The application communicates with Kodi via JSON-RPC 2.0:
 ### Additional Libraries
 
 #### Media Player
+
 - **React Player**
   - Multiple backend support (HTML5, YouTube, etc.)
   - Consistent API across sources
   - Custom controls support
 
 #### Virtual Scrolling
+
 - **TanStack Virtual**
   - Handle large media libraries
   - Smooth 60fps scrolling
   - Minimal memory footprint
 
 #### Routing
+
 - **TanStack Router**
   - Type-safe routing
   - Built-in search params
   - Code splitting support
 
 #### Forms
+
 - **React Hook Form + Zod**
   - Performant form handling
   - Type-safe validation
   - Minimal re-renders
 
 #### Internationalization
+
 - **i18next + react-i18next**
   - Industry standard
   - Lazy loading
@@ -224,6 +243,7 @@ The application communicates with Kodi via JSON-RPC 2.0:
   - JSON format (migrate from PO)
 
 #### Icons
+
 - **Lucide React**
   - Modern, consistent icon set
   - Tree-shakeable
@@ -232,11 +252,13 @@ The application communicates with Kodi via JSON-RPC 2.0:
 ### Testing & Quality
 
 #### Testing Framework
+
 - **Vitest** - Fast, Vite-native unit testing
 - **Testing Library** - User-centric component testing
 - **Playwright** - E2E testing with Kodi instance
 
 #### Code Quality
+
 - **ESLint** + **Prettier** - Linting and formatting
 - **TypeScript Strict Mode** - Maximum type safety
 - **Husky** + **lint-staged** - Pre-commit hooks
@@ -244,12 +266,14 @@ The application communicates with Kodi via JSON-RPC 2.0:
 ### Deployment & Progressive Web App
 
 #### PWA Features
+
 - **Workbox** - Service worker management
 - Offline capability for UI
 - Install prompt support
 - Background sync for queue changes
 
 #### Build Output
+
 - Static files deployable to any web server
 - Compatible with Kodi's embedded web server
 - CDN-ready for external hosting
@@ -330,13 +354,16 @@ verse/
 ### Key Architectural Patterns
 
 #### 1. Feature-Based Organization
+
 Each feature is self-contained with its own components, hooks, and routes. This promotes:
+
 - Clear boundaries
 - Easy code splitting
 - Independent testing
 - Team parallelization
 
 #### 2. API Layer Abstraction
+
 ```typescript
 // api/client.ts
 export class KodiClient {
@@ -348,8 +375,8 @@ export class KodiClient {
         jsonrpc: '2.0',
         method,
         params,
-        id: Date.now()
-      })
+        id: Date.now(),
+      }),
     });
     const data = await response.json();
     if (data.error) throw new KodiError(data.error);
@@ -361,17 +388,20 @@ export class KodiClient {
 export function useAlbums(options?: AlbumQueryOptions) {
   return useQuery({
     queryKey: ['albums', options],
-    queryFn: () => kodi.call('AudioLibrary.GetAlbums', {
-      properties: ['artist', 'genre', 'year', 'thumbnail'],
-      ...options
-    }),
+    queryFn: () =>
+      kodi.call('AudioLibrary.GetAlbums', {
+        properties: ['artist', 'genre', 'year', 'thumbnail'],
+        ...options,
+      }),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }
 ```
 
 #### 3. Type-Safe API
+
 Generate TypeScript types from Kodi JSON-RPC introspection:
+
 ```typescript
 // types/kodi.ts (generated or manually defined)
 export interface Album {
@@ -388,11 +418,12 @@ export interface Album {
 export type KodiMethod =
   | 'AudioLibrary.GetAlbums'
   | 'AudioLibrary.GetAlbumDetails'
-  | 'VideoLibrary.GetMovies'
-  // ... etc
+  | 'VideoLibrary.GetMovies';
+// ... etc
 ```
 
 #### 4. Dual Player State Management
+
 ```typescript
 // stores/player.ts
 interface PlayerState {
@@ -405,8 +436,12 @@ interface PlayerState {
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
   mode: 'auto',
-  kodiPlayer: { /* ... */ },
-  localPlayer: { /* ... */ },
+  kodiPlayer: {
+    /* ... */
+  },
+  localPlayer: {
+    /* ... */
+  },
   play: async (item) => {
     const { mode } = get();
     if (mode === 'kodi') {
@@ -414,11 +449,12 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     } else {
       playLocally(item);
     }
-  }
+  },
 }));
 ```
 
 #### 5. Real-time Updates
+
 ```typescript
 // api/websocket.ts
 export class KodiWebSocket {
@@ -446,6 +482,7 @@ export class KodiWebSocket {
 **Goal**: Set up development environment and core infrastructure
 
 **Tasks**:
+
 1. Initialize Vite + React + TypeScript project
 2. Configure Tailwind CSS and shadcn/ui
 3. Set up ESLint, Prettier, Husky
@@ -461,23 +498,27 @@ export class KodiWebSocket {
 
 ---
 
-### Phase 1: Music Library (Weeks 3-5)
+### Phase 1: Movies & TV Shows (Weeks 3-5)
 
-**Goal**: Implement complete music browsing experience
+**Goal**: Complete video library implementation
 
 **Tasks**:
-1. Artists list with virtual scrolling
-2. Artist detail page with albums
-3. Album detail page with tracks
-4. Song list views
-5. Music filtering (genre, year, etc.)
-6. Sorting options
-7. Search functionality for music
-8. Album artwork display with fallbacks
-9. Play/queue controls (Kodi mode)
-10. Metadata display (ratings, play count)
 
-**Deliverable**: Fully functional music library browsing
+1. Movies list with virtual scrolling and filtering
+2. Movie detail page with metadata
+3. TV Shows list
+4. TV Show detail with seasons
+5. Season view with episodes
+6. Episode detail pages
+7. Video metadata (ratings, cast, plot, artwork)
+8. Watched status tracking
+9. Resume functionality
+10. Basic playback controls (Kodi mode)
+11. Poster/fanart display with fallbacks
+
+**Deliverable**: Full video library browsing with basic playback
+
+**Rationale**: Starting with Movies/TV Shows since they represent the user's primary content (3,866 movies, 904 TV shows) and provide immediate value for testing.
 
 ---
 
@@ -486,9 +527,10 @@ export class KodiWebSocket {
 **Goal**: Implement dual-player system and controls
 
 **Tasks**:
+
 1. Player state management (Zustand)
 2. Kodi player controls (play, pause, skip, seek)
-3. Local audio player (React Player)
+3. Local video player (React Player)
 4. Player mode toggle UI
 5. Now playing display
 6. Progress tracking
@@ -501,24 +543,25 @@ export class KodiWebSocket {
 
 ---
 
-### Phase 3: Movies & TV Shows (Weeks 8-10)
+### Phase 3: Music Library (Weeks 8-10)
 
-**Goal**: Complete video library implementation
+**Goal**: Implement complete music browsing experience
 
 **Tasks**:
-1. Movies list with filtering
-2. Movie detail page
-3. TV Shows list
-4. TV Show detail with seasons
-5. Season view with episodes
-6. Episode detail pages
-7. Video metadata (ratings, cast, plot)
-8. Watched status tracking
-9. Resume functionality
-10. Video streaming (local mode)
-11. TMDB integration for metadata/artwork
 
-**Deliverable**: Full video library with playback
+1. Artists list with virtual scrolling
+2. Artist detail page with albums
+3. Album detail page with tracks
+4. Song list views
+5. Music filtering (genre, year, etc.)
+6. Sorting options
+7. Search functionality for music
+8. Album artwork display with fallbacks
+9. Play/queue controls (Kodi mode)
+10. Metadata display (ratings, play count)
+11. Local audio streaming support
+
+**Deliverable**: Fully functional music library browsing
 
 ---
 
@@ -527,6 +570,7 @@ export class KodiWebSocket {
 **Goal**: Advanced playlist and queue features
 
 **Tasks**:
+
 1. Queue view for both players
 2. Drag-and-drop reordering
 3. Add to queue from any media item
@@ -546,6 +590,7 @@ export class KodiWebSocket {
 **Goal**: Global search and content discovery
 
 **Tasks**:
+
 1. Global search across all media types
 2. Fuzzy search implementation
 3. Search result UI with type filtering
@@ -566,6 +611,7 @@ export class KodiWebSocket {
 **Goal**: Settings management and customization
 
 **Tasks**:
+
 1. Connection settings (host, port, credentials)
 2. UI preferences (theme, layout density)
 3. Player preferences (default player, autoplay)
@@ -586,6 +632,7 @@ export class KodiWebSocket {
 **Goal**: Live TV and recording features
 
 **Tasks**:
+
 1. Channel list (TV and Radio)
 2. EPG (program guide) UI
 3. Live stream playback
@@ -603,6 +650,7 @@ export class KodiWebSocket {
 **Goal**: Add-on browsing and management
 
 **Tasks**:
+
 1. Add-ons list
 2. Add-on detail pages
 3. Browse add-on content
@@ -620,6 +668,7 @@ export class KodiWebSocket {
 **Goal**: Additional functionality and polish
 
 **Tasks**:
+
 1. File browser
 2. Thumbnail management
 3. Media editor (metadata editing)
@@ -640,6 +689,7 @@ export class KodiWebSocket {
 **Goal**: Progressive Web App and mobile optimization
 
 **Tasks**:
+
 1. Service worker implementation
 2. Offline UI caching
 3. Install prompt
@@ -660,6 +710,7 @@ export class KodiWebSocket {
 **Goal**: Multi-language support
 
 **Tasks**:
+
 1. Set up i18next
 2. Extract all strings to translation files
 3. Migrate existing translations from PO to JSON
@@ -678,6 +729,7 @@ export class KodiWebSocket {
 **Goal**: Comprehensive testing and bug fixes
 
 **Tasks**:
+
 1. Unit test coverage for critical paths
 2. Integration tests for API layer
 3. E2E tests for major workflows
@@ -698,6 +750,7 @@ export class KodiWebSocket {
 **Goal**: Documentation and initial release
 
 **Tasks**:
+
 1. User documentation
 2. Installation guide
 3. Configuration guide
@@ -778,6 +831,7 @@ export class KodiWebSocket {
 ### Browser Support
 
 **Target Browsers**:
+
 - Chrome/Edge 90+ (last 2 versions)
 - Firefox 88+ (last 2 versions)
 - Safari 14+ (last 2 versions)
@@ -821,11 +875,13 @@ export class KodiWebSocket {
 ### Data Migration
 
 **Settings Migration**:
+
 - Detect legacy localStorage keys
 - Convert to new format
 - Preserve user preferences
 
 **No Data Loss**:
+
 - All data lives in Kodi
 - Settings are UI-only
 - Can switch back to Chorus2 anytime
@@ -835,6 +891,7 @@ export class KodiWebSocket {
 ## Success Metrics
 
 ### Technical Metrics
+
 - **Performance**
   - First Contentful Paint < 1.5s
   - Time to Interactive < 3s
@@ -849,6 +906,7 @@ export class KodiWebSocket {
   - E2E tests for critical paths
 
 ### User Metrics
+
 - **Adoption**
   - 1,000+ active users in first 3 months
   - 50+ GitHub stars
@@ -862,6 +920,7 @@ export class KodiWebSocket {
   - Average bug fix time < 7 days
 
 ### Community Metrics
+
 - **Contributors**
   - 10+ contributors in first year
   - 50+ pull requests
@@ -917,17 +976,20 @@ export class KodiWebSocket {
 ## Resource Requirements
 
 ### Development Team (Ideal)
+
 - 1-2 Frontend developers (React/TypeScript)
 - 1 Designer (UX/UI)
 - 1 QA/Tester (part-time)
 - Community contributors
 
 ### Tools & Services
+
 - GitHub (source control, issues, CI/CD)
 - Vercel/Netlify (preview deployments)
 - BrowserStack (cross-browser testing, optional)
 
 ### Hardware
+
 - Development machines
 - Test devices (mobile phones, tablets)
 - Kodi test instances (various versions)
@@ -937,6 +999,7 @@ export class KodiWebSocket {
 ## Communication Plan
 
 ### Stakeholders
+
 1. **Kodi Core Team**
    - Regular updates on progress
    - API compatibility discussions
@@ -953,6 +1016,7 @@ export class KodiWebSocket {
    - Clear contribution guidelines
 
 ### Documentation
+
 - Weekly progress updates (GitHub Discussions)
 - Monthly blog posts
 - Demo videos for major features
@@ -963,6 +1027,7 @@ export class KodiWebSocket {
 ## Next Steps
 
 ### Immediate Actions
+
 1. **Repository setup** - Decide between new `xbmc/verse` repo or continue in current location
 2. **Set up project infrastructure** (Phase 0)
 3. **Design system exploration** (mockups/wireframes)
@@ -970,6 +1035,7 @@ export class KodiWebSocket {
 5. **Recruit contributors** (post on forums, Reddit)
 
 ### First 30 Days
+
 1. Complete Phase 0 (Foundation)
 2. Begin Phase 1 (Music Library)
 3. Create demo video
@@ -977,6 +1043,7 @@ export class KodiWebSocket {
 5. Establish testing strategy
 
 ### First 90 Days
+
 1. Complete Phases 1-3 (Music, Player, Videos)
 2. Alpha release for community testing
 3. Collect initial feedback
@@ -988,17 +1055,18 @@ export class KodiWebSocket {
 
 ### Technology Alternatives Considered
 
-| Category | Chosen | Alternatives | Rationale |
-|----------|---------|--------------|-----------|
-| Framework | React | Vue 3, Svelte | Largest community, most contributors |
-| State | Zustand | Redux, Jotai | Simplicity without boilerplate |
-| Data Fetching | TanStack Query | SWR, Apollo | Best caching, WebSocket support |
-| Styling | Tailwind | CSS Modules, Styled Components | Rapid development, consistency |
-| Build Tool | Vite | webpack, Parcel | Speed, DX, modern |
-| Testing | Vitest | Jest | Vite integration, speed |
-| Router | TanStack Router | React Router | Type safety, modern patterns |
+| Category      | Chosen          | Alternatives                   | Rationale                            |
+| ------------- | --------------- | ------------------------------ | ------------------------------------ |
+| Framework     | React           | Vue 3, Svelte                  | Largest community, most contributors |
+| State         | Zustand         | Redux, Jotai                   | Simplicity without boilerplate       |
+| Data Fetching | TanStack Query  | SWR, Apollo                    | Best caching, WebSocket support      |
+| Styling       | Tailwind        | CSS Modules, Styled Components | Rapid development, consistency       |
+| Build Tool    | Vite            | webpack, Parcel                | Speed, DX, modern                    |
+| Testing       | Vitest          | Jest                           | Vite integration, speed              |
+| Router        | TanStack Router | React Router                   | Type safety, modern patterns         |
 
 ### References
+
 - [Kodi JSON-RPC API Documentation](https://kodi.wiki/view/JSON-RPC_API)
 - [React 18 Documentation](https://react.dev)
 - [TanStack Query](https://tanstack.com/query)
@@ -1007,6 +1075,7 @@ export class KodiWebSocket {
 - [Web Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 
 ### Glossary
+
 - **PWA**: Progressive Web App
 - **HMR**: Hot Module Replacement
 - **JSON-RPC**: JSON Remote Procedure Call
