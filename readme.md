@@ -1,147 +1,248 @@
-# Kodi Web Interface - Chorus2
-The default Web Interface for Kodi.
+# Verse
 
-A great modern Web UI for Kodi. Browse your Music, Movies or TV Shows from the comfort of your
-own web browser. You can play media via Kodi or stream it in your browser. Works best with Chrome
-but plays well with most modern browsers.
+> What comes after the Chorus in a song
 
-Successor to [Chorus](https://github.com/jez500/chorus).
-A complete rebuild using Coffee Script, Backbone, Marionette and much, much more.
+A modern, fast, and beautiful web interface for Kodi - the successor to Chorus2.
 
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](LICENSE)
+[![Status: Active Development](https://img.shields.io/badge/Status-Active%20Development-orange)](PROJECT_PLAN.md)
 
-## Author
-[Jeremy Graham ](http://jez.me) with help from [these kind people](https://github.com/xbmc/chorus2/graphs/contributors)
+---
 
+## Overview
 
-## Current state
-Pretty good, most things work really well. Other things need [polish/finishing/fixing](https://github.com/xbmc/chorus2/issues).
-Still considered beta software, expect bugs, changes, nuclear war, etc.
+**Verse** is a complete reimagining of the Kodi web interface, built from the ground up with modern web technologies. With the resurgence of Kodi via CoreELEC and renewed enthusiast interest, Verse provides a web UI that matches contemporary expectations while honoring the spirit of Chorus2.
 
-## Getting it working
-As of Kodi v17, Chorus2 comes pre-installed out of the box, you just need to enable it and tick a few boxes.
+### Key Features (Planned)
 
-### Enabling & Configuring
-Kodi > Settings (cog) > Services > Control
+- 🎵 **Complete Media Library** - Browse music, movies, TV shows, and live TV
+- 🎮 **Dual Player Mode** - Control Kodi remotely or stream directly in your browser
+- 🚀 **Blazing Fast** - Built with Vite and optimized for performance
+- 📱 **Progressive Web App** - Install on any device, works offline
+- 🎨 **Modern Design** - Clean, accessible interface with dark mode by default
+- ⌨️ **Keyboard Shortcuts** - Power user features built-in
+- 🌍 **Multilingual** - Support for 80+ languages
+- ♿ **Accessible** - WCAG AA compliant
 
-* Enable "Allow control of Kodi via HTTP"
-* Select Web interface
-* Select "Kodi web interface - Chorus2"
-* Enable "Allow programs on this system to control Kodi"
-* Enable "Allow programs on other systems to control Kodi"
+---
 
-**For security reasons you should set a username and password to prevent unauthorized access**
+## Why Verse?
 
-### Manual install
-For Kodi v16 and below or if you want to get the latest version ASAP, an install via zip is the easiest way to go. Grab the
-latest release of `webinterface.default.2.X.X.zip` from the [releases page](https://github.com/xbmc/chorus2/releases) then
-install it [like this](http://kodi.wiki/view/Add-on_manager#How_to_install_from_a_ZIP_file). **NOTE:** Chorus2 is intended to
-be used with the latest version of Kodi and some (or all) things might not work in older versions due to API changes.
+Chorus2 has served the Kodi community well, but its technology stack (CoffeeScript, Backbone, Marionette) makes it increasingly difficult to maintain and enhance. Verse addresses this by:
 
-### Using it
-Point your web browser to `http://localhost:8080` - replace `localhost` with your IP address if using remotely and if
-you have changed your port to something other than `8080` be sure to change that too. More information and advanced
-usage can be found over on the [Kodi Wiki page](http://kodi.wiki/view/Web_interface).
+- **Modern Stack**: React 18, TypeScript, Vite - technologies that attract contributors
+- **Type Safety**: Full TypeScript implementation prevents bugs and improves maintainability
+- **Better Performance**: Virtual scrolling, code splitting, and optimized caching
+- **Mobile First**: Responsive design that works beautifully on all devices
+- **Developer Experience**: Hot reload, modern tooling, clear architecture
 
-## Feature requests / Bugs
-Add them to the [list](https://github.com/xbmc/chorus2/issues). For bugs please include Kodi version, Web browser version,
-Chorus version and any errors that display in the console. For feature requests, checkout the API browser to see if your
-request is currently possible.
+---
 
+## Technology Stack
 
-## Streaming
-Disclaimer: The success of this depends on the file formats vs what the browser supports.  In general most things work.
+### Core
+- **Framework**: [React 18](https://react.dev) with [TypeScript](https://www.typescriptlang.org)
+- **Build Tool**: [Vite](https://vitejs.dev) - Lightning-fast HMR
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS
+- **Components**: [shadcn/ui](https://ui.shadcn.com) - Accessible, customizable components
 
-### Audio streaming
-In the top right there are some tabs, two of them are named Kodi and Local, this is how you toggle what player the UI
-is controlling.  In Local mode the logo and accents are pinky-red, In Kodi mode the logo is the Kodi blue. When you
-are in a given mode, actions affect that player, so if you click Play on a track when in Local mode, it will play
-through the browser, likewise, when in Kodi mode all commands are sent to Kodi.  You can also add media to other
-playlists by clicking the menu buttons (three dots vertical) on most media items.
+### State & Data
+- **API Layer**: [TanStack Query](https://tanstack.com/query) - Powerful data synchronization
+- **Client State**: [Zustand](https://zustand-demo.pmnd.rs) - Simple, scalable state management
+- **Real-time**: Native WebSocket with automatic reconnection
 
-### Video streaming
-Video streaming via HTML5 "sort of" works, it really depends on the codec used. An embedded VLC player is also available with better codec support.
-This looks like the best we can get until Kodi supports transcoding.
-**Chrome users**: Chrome has removed support for vlc/divx plugins so streaming a video requires a [Chrome friendly codec](https://en.wikipedia.org/wiki/HTML5_video#Browser_support).
-For best results use Chrome with mp4 video that has 2 channel audio (5.1 audio doesn't seem to work).
+### Additional
+- **Routing**: [TanStack Router](https://tanstack.com/router) - Type-safe routing
+- **Forms**: [React Hook Form](https://react-hook-form.com) + [Zod](https://zod.dev)
+- **i18n**: [i18next](https://www.i18next.com) - Internationalization
+- **Testing**: [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com)
+- **Icons**: [Lucide React](https://lucide.dev)
 
-## Kodi settings via the web interface
-You can change most of the settings you would find in Kodi via the settings page in the web interface.
-Some settings have been omitted as they require interaction with the GUI and others are just a basic text field with no options.
+---
 
-## Kodi API browser
-There is a hidden feature in Chorus that allows you to play with the Kodi API and see what is capable via the JSON-RPC
-interface. If you are building an app or addon that uses the API this can be super useful for both finding and testing
-all the methods and types available. If you are thinking about a new feature for Chorus, this is also a great place to
-test if it is possible (and fast track development by adding a working example to an issue). You can find the API browser
-via "Chorus Lab" (bottom right 3 vertical dots > "The Lab") or directly via `http://localhost:8080/#lab/api-browser`.
+## Project Status
+
+🚧 **Currently in active development** - Phase 0 (Foundation)
+
+Verse is being built incrementally following a [detailed project plan](PROJECT_PLAN.md):
+
+- ✅ **Phase 0**: Foundation & Infrastructure (In Progress)
+- ⏳ **Phase 1**: Music Library (Coming Soon)
+- ⏳ **Phase 2**: Player & Playback
+- ⏳ **Phase 3**: Movies & TV Shows
+- ... and [9 more phases](PROJECT_PLAN.md#implementation-phases)
+
+**Estimated Timeline**: MVP in 4-6 months, feature parity in 8-12 months
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org) 18+ and npm
+- A running [Kodi](https://kodi.tv) instance with:
+  - HTTP control enabled
+  - Username and password configured (recommended)
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/xbmc/chorus2.git
+cd chorus2
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:5173 in your browser
+```
+
+### Building for Production
+
+```bash
+# Create optimized production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Testing
+
+```bash
+# Run unit tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+---
+
+## Documentation
+
+- 📋 [Project Plan](PROJECT_PLAN.md) - Comprehensive development roadmap
+- 🏗️ [Architecture](docs/ARCHITECTURE.md) - Technical design decisions
+- 🎨 [Design System](docs/DESIGN_SYSTEM.md) - UI/UX guidelines
+- 🔌 [API Integration](docs/API.md) - Kodi JSON-RPC implementation
+- 🤝 [Contributing](CONTRIBUTING.md) - How to contribute
+
+---
 
 ## Contributing
-If you would like to make this project better I would appreciate any help. There is a develop branch for each version of
-Kodi. Please do pull requests against the `dev` branch for the correct version (even better if you can do a PR for both).
-Leia (v18) dev branch is `18.x-dev`, Krypton (v17) dev branch is `17.x-dev`. See the
-[developers documentation](https://github.com/xbmc/chorus2/tree/master/src/lang/en/developers.md) for information about
-getting a dev environment up and running then compiling the project using docker.
 
-### Translations
-I only know English so definitely need help with this. I also don't know heaps about JavaScript multilingual stuff but
-thanks to [@mizaki](https://github.com/mizaki) we have a structure ready to go. So it should be nice and easy to translate the UI.
+We welcome contributions! Verse is being built in the open and we'd love your help.
 
-At the moment, there are [a handful](https://github.com/xbmc/chorus2/tree/master/src/lang/_strings) of languages available
-but more can be easily added. More strings are always being added so always consider english as the source of truth.
+### Ways to Contribute
 
-So if you see something in english but want it in your language, I need you! To contribute, send me a PR on a new branch
-against `18.x-dev` and/or `17.x-dev`, or if you don't know git, a link to the language file.
+- 🐛 **Report bugs** - Found an issue? [Open a bug report](../../issues/new?template=bug_report.md)
+- 💡 **Suggest features** - Have an idea? [Start a discussion](../../discussions)
+- 🔧 **Submit PRs** - Fix bugs or implement features
+- 📖 **Improve docs** - Help make our documentation better
+- 🌍 **Translate** - Help translate Verse to your language
+- 🎨 **Design** - UI/UX improvements and design work
 
-Language Files [here](https://github.com/xbmc/chorus2/tree/master/src/lang).
-*English is the only real complete translation file so start with that as your base.*
+### Development Workflow
 
-## Donate
-Are you a fan of Chorus? You can [buy Jeremy a beer](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ZCGV976794JHE&lc=AU&item_name=Chorus%20Beer%20Fund&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted) to say thanks :)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Write/update tests
+5. Commit with clear messages (`git commit -m 'Add amazing feature'`)
+6. Push to your fork (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Code Style
+
+- TypeScript with strict mode enabled
+- ESLint + Prettier for code formatting
+- Follow React best practices and hooks guidelines
+- Write tests for new features
+- Keep accessibility in mind (WCAG AA)
+
+---
+
+## Roadmap
+
+### Phase 0: Foundation (Weeks 1-2) - **IN PROGRESS**
+- ✅ Project structure and tooling setup
+- ⏳ JSON-RPC client implementation
+- ⏳ Basic layout and routing
+- ⏳ Connection management
+
+### Phase 1: Music Library (Weeks 3-5)
+- Artists, albums, and songs browsing
+- Search and filtering
+- Virtual scrolling for large libraries
+
+### Phase 2: Player & Playback (Weeks 6-7)
+- Dual player mode (Kodi + Local)
+- Playback controls
+- Real-time status updates
+
+### Coming Later
+- Movies & TV Shows
+- Playlists & Queue Management
+- Live TV/PVR
+- Add-ons
+- Settings Management
+- PWA Features
+
+[View complete roadmap →](PROJECT_PLAN.md#implementation-phases)
+
+---
+
+## Community
+
+- 💬 [GitHub Discussions](../../discussions) - Questions, ideas, and general chat
+- 🐛 [Issue Tracker](../../issues) - Bug reports and feature requests
+- 📺 [Kodi Forums](https://forum.kodi.tv) - General Kodi discussion
+- 💬 [Reddit r/Kodi](https://reddit.com/r/kodi) - Community discussion
+
+---
+
+## Relationship to Chorus2
+
+Verse is a **successor**, not a replacement... yet. During development:
+
+- Chorus2 remains the default web interface for Kodi
+- Both can be installed side-by-side
+- No features will be removed from Chorus2
+- Once Verse reaches feature parity, it will become the recommended interface
+- Chorus2 will remain available for those who prefer it
+
+All credit for the original vision goes to [Jeremy Graham](http://jez.me) and the [Chorus2 contributors](https://github.com/xbmc/chorus2/graphs/contributors).
+
+---
 
 ## License
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under the terms of the [GNU General Public License v2](LICENSE) as published by the Free Software Foundation.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-[along with this program](https://github.com/xbmc/chorus2/blob/master/LICENSE);
-if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
-Fifth Floor, Boston, MA 02110-1301 USA.
+---
 
-[Click here for more information ](https://github.com/xbmc/chorus2/blob/master/src/lang/en/license.md).
+## Acknowledgments
 
+- **Jeremy Graham** - Creator of Chorus and Chorus2
+- **Kodi Team** - For the amazing media center
+- **Chorus2 Contributors** - For years of improvements and translations
+- **Open Source Community** - For the incredible tools that make Verse possible
 
-## Screenshots
+---
 
-### Homepage (now playing)
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/now-playing.jpg "Homepage/Now Playing")
+<div align="center">
 
-### Search results
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/search.jpg "Search")
+**[View Project Plan](PROJECT_PLAN.md)** • **[Start Contributing](CONTRIBUTING.md)** • **[Join Discussion](../../discussions)**
 
-### Artists
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/artists.jpg "Artists")
+Made with ❤️ by the Kodi community
 
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist//screenshots/artist.jpg "Artist")
-
-### Video library
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/tv.jpg "TV")
-
-### Filtering
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/movie.jpg "Movies")
-
-### Settings
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/settings.jpg "Settings")
-
-### Add-ons
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/addons.jpg "Add-ons")
-
-### Editing media
-![alt text](https://raw.githubusercontent.com/xbmc/chorus2/master/dist/screenshots/edit-media.jpg "Editing Media")
+</div>
