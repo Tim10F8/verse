@@ -53,8 +53,11 @@ export class KodiClient {
       'Content-Type': 'application/json',
     };
 
-    // Add basic auth if credentials are provided
-    if (this.username && this.password) {
+    // In development, the Vite proxy handles authentication
+    // In production, we need to add the auth header ourselves
+    const isDevelopment = import.meta.env.DEV;
+
+    if (!isDevelopment && this.username && this.password) {
       const auth = btoa(`${this.username}:${this.password}`);
       headers['Authorization'] = `Basic ${auth}`;
     }
@@ -65,7 +68,11 @@ export class KodiClient {
   /**
    * Call a Kodi JSON-RPC method
    */
-  async call<T>(method: string, params?: Record<string, unknown>): Promise<T> {
+  async call<T>(
+    method: string,
+    params?: Record<string, unknown>,
+    signal?: AbortSignal
+  ): Promise<T> {
     const request: JsonRpcRequest = {
       jsonrpc: '2.0',
       method,
@@ -73,18 +80,31 @@ export class KodiClient {
       id: ++this.requestId,
     };
 
+    console.log('KodiClient.call - endpoint:', this.endpoint);
+    console.log('KodiClient.call - request:', request);
+    console.log('KodiClient.call - headers:', this.getHeaders());
+
     try {
       const response = await fetch(this.endpoint, {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify(request),
+        signal,
       });
 
+      console.log('KodiClient.call - response:', response);
+      console.log('KodiClient.call - response.ok:', response.ok);
+      console.log('KodiClient.call - response.status:', response.status);
+      console.log('KodiClient.call - response.statusText:', response.statusText);
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        const text = await response.text();
+        console.error('KodiClient.call - error response body:', text);
+        throw new Error(`HTTP error! status: ${String(response.status)} - ${text}`);
       }
 
       const data = (await response.json()) as JsonRpcResponse<T>;
+      console.log('KodiClient.call - response data:', data);
 
       if (data.error) {
         throw new KodiError(data.error.message, data.error.code, data.error.data);
@@ -96,6 +116,16 @@ export class KodiClient {
 
       return data.result;
     } catch (error) {
+      // If the request was aborted (e.g., React Strict Mode double-mounting),
+      // just rethrow the error without wrapping it
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        throw error;
+      }
+
+      console.error('KodiClient.call - caught error:', error);
+      console.error('KodiClient.call - error type:', error?.constructor?.name);
+      console.error('KodiClient.call - error message:', error instanceof Error ? error.message : String(error));
+
       if (error instanceof KodiError) {
         throw error;
       }
