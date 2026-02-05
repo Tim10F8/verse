@@ -9,7 +9,7 @@ export interface MovieFilters {
   sortOrder: 'asc' | 'desc';
 }
 
-export function useMovieFilters(movies: KodiMovie[]) {
+export function useMovieFilters(movies: KodiMovie[], kodiTotal?: number) {
   const [filters, setFilters] = useState<MovieFilters>({
     search: '',
     sortBy: 'title',
@@ -52,7 +52,8 @@ export function useMovieFilters(movies: KodiMovie[]) {
 
     // Apply genre filter
     if (filters.genre) {
-      result = result.filter((movie) => movie.genre?.includes(filters.genre!));
+      const genre = filters.genre;
+      result = result.filter((movie) => movie.genre?.includes(genre));
     }
 
     // Apply year filter
@@ -94,7 +95,7 @@ export function useMovieFilters(movies: KodiMovie[]) {
     filteredMovies,
     genres,
     years,
-    totalCount: movies.length,
+    totalCount: kodiTotal ?? movies.length,
     filteredCount: filteredMovies.length,
   };
 }

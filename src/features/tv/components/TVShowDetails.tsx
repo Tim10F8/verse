@@ -1,14 +1,14 @@
-import { useParams, Link, Outlet, useMatches } from '@tanstack/react-router';
-import { ArrowLeft } from 'lucide-react';
+import { useParams, Outlet, useMatches } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useTVShowDetails } from '@/api/hooks/useTVShowDetails';
 import { useSeasons } from '@/api/hooks/useSeasons';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MediaImage } from '@/components/media/MediaImage';
 import { WatchedIndicator } from '@/components/video/WatchedIndicator';
 import { TVShowActions } from './TVShowActions';
 import { TVShowMetadata } from './TVShowMetadata';
 import { SeasonList } from './SeasonList';
+import { useBreadcrumbs } from '@/components/layout/BreadcrumbContext';
 import { getFanartUrl, getClearLogoUrl } from '@/lib/image-utils';
 
 export function TVShowDetails() {
@@ -21,6 +21,18 @@ export function TVShowDetails() {
 
   const { data: tvshow, isLoading, isError, error } = useTVShowDetails(tvshowIdNum);
   const { data: seasons, isLoading: isLoadingSeasons } = useSeasons(tvshowIdNum);
+  const { setItems } = useBreadcrumbs();
+
+  // Set breadcrumbs when tvshow data is loaded
+  useEffect(() => {
+    if (isOnChildRoute) return; // Don't set breadcrumbs when on child route
+    if (tvshow) {
+      const showLabel = tvshow.year ? `${tvshow.title} (${String(tvshow.year)})` : tvshow.title;
+      setItems([{ label: 'TV Shows', href: '/tv' }, { label: showLabel }]);
+    } else {
+      setItems([{ label: 'TV Shows', href: '/tv' }, { label: 'Loading...' }]);
+    }
+  }, [tvshow, setItems, isOnChildRoute]);
 
   // If we're on a child route, just render the outlet
   if (isOnChildRoute) {
@@ -47,12 +59,6 @@ export function TVShowDetails() {
   if (isError || !tvshow) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Link to="/tv">
-          <Button variant="ghost" size="sm" className="mb-4 gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to TV Shows
-          </Button>
-        </Link>
         <div className="border-destructive bg-destructive/10 rounded-lg border p-6">
           <h2 className="text-destructive mb-2 text-lg font-semibold">Error loading TV show</h2>
           <p className="text-muted-foreground text-sm">
@@ -99,13 +105,6 @@ export function TVShowDetails() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
-        <Link to="/tv">
-          <Button variant="ghost" size="sm" className="mb-6 gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to TV Shows
-          </Button>
-        </Link>
-
         <div className="space-y-6">
           {/* Title and Watched Indicator */}
           <div className="flex items-start justify-between gap-4">

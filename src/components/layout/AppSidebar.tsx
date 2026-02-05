@@ -1,0 +1,116 @@
+'use client';
+
+import * as React from 'react';
+import { Link } from '@tanstack/react-router';
+import { Film, Tv, Settings, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { KodiLogo } from '@/components/icons/KodiLogo';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from '@/components/ui/sidebar';
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link to="/">
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <KodiLogo className="size-4" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Verse</span>
+                  <span className="truncate text-xs">Kodi Interface</span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Library</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Movies">
+                  <Link
+                    to="/movies"
+                    activeProps={{
+                      className: 'bg-sidebar-accent text-sidebar-accent-foreground font-medium',
+                    }}
+                  >
+                    <Film />
+                    <span>Movies</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="TV Shows">
+                  <Link
+                    to="/tv"
+                    activeProps={{
+                      className: 'bg-sidebar-accent text-sidebar-accent-foreground font-medium',
+                    }}
+                  >
+                    <Tv />
+                    <span>TV Shows</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip="Settings">
+              <Link
+                to="/settings"
+                activeProps={{
+                  className: 'bg-sidebar-accent text-sidebar-accent-foreground font-medium',
+                }}
+              >
+                <Settings />
+                <span>Settings</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip="Toggle Theme"
+              onClick={() => {
+                setTheme(theme === 'light' ? 'dark' : 'light');
+              }}
+            >
+              <Sun className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+              <span>Theme</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+
+      <SidebarRail />
+    </Sidebar>
+  );
+}

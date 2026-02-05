@@ -14,6 +14,7 @@ import { ViewToggle } from '@/components/media/ViewToggle';
 import { useMoviesInfinite } from '@/api/hooks/useMoviesInfinite';
 import { useMovieFilters } from '../hooks/useMovieFilters';
 import { useViewMode } from '@/hooks/useViewMode';
+import { useBreadcrumbs } from '@/components/layout/BreadcrumbContext';
 import { Search, Loader2 } from 'lucide-react';
 
 export function MovieList() {
@@ -26,8 +27,18 @@ export function MovieList() {
   // Flatten all pages into a single array
   const allMovies = data?.pages.flatMap((page) => page.movies) || [];
 
+  // Get the total count from Kodi's API response
+  const kodiTotal = data?.pages[0]?.total;
+
   const { filters, setFilters, filteredMovies, genres, filteredCount, totalCount } =
-    useMovieFilters(allMovies);
+    useMovieFilters(allMovies, kodiTotal);
+
+  const { setItems } = useBreadcrumbs();
+
+  // Set breadcrumbs
+  useEffect(() => {
+    setItems([{ label: 'Movies' }]);
+  }, [setItems]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -89,16 +100,7 @@ export function MovieList() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="mb-2 text-3xl font-bold">Movies</h1>
-        <p className="text-muted-foreground">
-          {filteredCount} {filteredCount === 1 ? 'movie' : 'movies'}
-          {filteredCount !== totalCount && ` of ${String(totalCount)} total`}
-        </p>
-      </div>
-
+    <div className="container mx-auto px-4 py-6">
       {/* Filters */}
       <div className="mb-6 space-y-4">
         {/* Search and View Toggle */}
@@ -176,6 +178,11 @@ export function MovieList() {
             </SelectContent>
           </Select>
         </div>
+
+        {/* Count */}
+        <p className="text-muted-foreground text-sm">
+          Showing {filteredCount} of {totalCount} movies
+        </p>
       </div>
 
       {/* Movie grid/list */}
@@ -188,7 +195,7 @@ export function MovieList() {
               ))}
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-4">
               {filteredMovies.map((movie) => (
                 <MovieListItem key={movie.movieid} movie={movie} />
               ))}

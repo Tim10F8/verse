@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useViewMode } from '@/hooks/useViewMode';
+import { useBreadcrumbs } from '@/components/layout/BreadcrumbContext';
 import { Search } from 'lucide-react';
 import type { KodiSort, KodiFilter } from '@/api/types/common';
 
@@ -23,6 +24,12 @@ export function TVShowList() {
   const [viewMode, setViewMode] = useViewMode('tvshows', 'grid');
 
   const observerTarget = useRef<HTMLDivElement>(null);
+  const { setItems } = useBreadcrumbs();
+
+  // Set breadcrumbs
+  useEffect(() => {
+    setItems([{ label: 'TV Shows' }]);
+  }, [setItems]);
 
   // Build sort object
   const sort: KodiSort = {
@@ -121,10 +128,8 @@ export function TVShowList() {
   const totalCount = data?.pages[0]?.total || 0;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 space-y-4">
-        <h1 className="text-4xl font-bold">TV Shows</h1>
-
+    <div className="container mx-auto px-4 py-6">
+      <div className="mb-6 space-y-4">
         {/* Search and View Toggle */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative max-w-md flex-1">
@@ -191,7 +196,7 @@ export function TVShowList() {
               ))}
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-4">
               {tvshows.map((tvshow) => (
                 <TVShowListItem key={tvshow.tvshowid} tvshow={tvshow} />
               ))}

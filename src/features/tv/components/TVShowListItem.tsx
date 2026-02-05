@@ -27,7 +27,7 @@ export function TVShowListItem({ tvshow, className }: TVShowListItemProps) {
     <Link
       to="/tv/$tvshowId"
       params={{ tvshowId: tvshow.tvshowid.toString() }}
-      className={cn('group', className)}
+      className={cn('group block', className)}
     >
       <div className="bg-card hover:bg-accent flex gap-4 rounded-lg border p-3 transition-colors">
         {/* Poster thumbnail */}

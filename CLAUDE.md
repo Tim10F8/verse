@@ -26,6 +26,7 @@ Chorus2 is the current web interface that allows users to browse and control the
 ## Development Commands
 
 ### Initial Setup
+
 ```bash
 # Using Docker (recommended)
 docker pull jez500/chorus2-dev:latest
@@ -36,6 +37,7 @@ docker run -tiP -v `pwd`:/app jez500/chorus2-dev:latest ./build.sh install
 ```
 
 ### Building
+
 ```bash
 # Full build (languages, docs, JS, CSS)
 grunt build
@@ -48,6 +50,7 @@ grunt lang
 ```
 
 ### Release Build
+
 ```bash
 # Build and package a release version
 ./build.sh <version-number>
@@ -88,16 +91,19 @@ The codebase follows a modular Marionette architecture organized by feature:
 ## Key Conventions
 
 ### CoffeeScript Patterns
+
 - Global objects: `@helpers`, `@config`, `@Kodi` (the main app instance)
 - Uses `do` expressions for scoping (e.g., `@Kodi = do (Backbone, Marionette) ->`)
 - Config stored in `config.static` object and persisted via localStorage
 
 ### Build Outputs
+
 - **Source**: `src/` directory (commit these files)
 - **Compiled**: `dist/` directory (do not commit unless building a release)
 - **Build artifacts**: `dist/js/build/*.js` (always excluded from releases)
 
 ### Translations
+
 - English (`src/lang/_strings/en.po`) is the source of truth
 - PO files converted to JSON for Jed library
 - Markdown docs in `src/lang/` compiled to HTML in `dist/lang/`
@@ -116,3 +122,9 @@ The codebase follows a modular Marionette architecture organized by feature:
 - Requires Kodi HTTP control to be enabled (Settings > Services > Control)
 - BrowserSync proxy settings in Gruntfile.js (lines 239-240) are environment-specific and may need adjustment
 - The app minifies libraries but not the main app code for easier debugging in production
+
+## Claude Code Instructions
+
+### Firefox MCP Usage
+
+- **ALWAYS ask for user confirmation before taking screenshots** using the Firefox MCP tools (`mcp__firefox-devtools__screenshot_page`, `mcp__firefox-devtools__screenshot_by_uid`). Do this EVERY TIME, even if a screenshot was recently taken or seems obviously needed. Never assume permission.

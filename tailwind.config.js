@@ -38,6 +38,18 @@ export default {
           DEFAULT: 'hsl(var(--color-card) / <alpha-value>)',
           foreground: 'hsl(var(--color-card-foreground) / <alpha-value>)',
         },
+        sidebar: {
+          DEFAULT: 'hsl(var(--color-sidebar) / <alpha-value>)',
+          foreground: 'hsl(var(--color-sidebar-foreground) / <alpha-value>)',
+          primary: 'hsl(var(--color-sidebar-primary) / <alpha-value>)',
+          'primary-foreground':
+            'hsl(var(--color-sidebar-primary-foreground) / <alpha-value>)',
+          accent: 'hsl(var(--color-sidebar-accent) / <alpha-value>)',
+          'accent-foreground':
+            'hsl(var(--color-sidebar-accent-foreground) / <alpha-value>)',
+          border: 'hsl(var(--color-sidebar-border) / <alpha-value>)',
+          ring: 'hsl(var(--color-sidebar-ring) / <alpha-value>)',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

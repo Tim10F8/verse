@@ -1,5 +1,6 @@
 import { useParams, Link } from '@tanstack/react-router';
-import { ArrowLeft, Play } from 'lucide-react';
+import { useEffect } from 'react';
+import { Play } from 'lucide-react';
 import { useEpisodeDetails } from '@/api/hooks/useEpisodes';
 import { usePlayEpisode } from '@/api/hooks/usePlayback';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { MediaImage } from '@/components/media/MediaImage';
 import { WatchedIndicator } from '@/components/video/WatchedIndicator';
 import { MovieCast } from '@/features/movies/components/MovieCast';
+import { useBreadcrumbs } from '@/components/layout/BreadcrumbContext';
 import { getThumbnailUrl, getFanartUrl } from '@/lib/image-utils';
 import { formatRuntime } from '@/lib/format';
 
@@ -17,6 +19,29 @@ export function EpisodeDetails() {
 
   const { data: episode, isLoading, isError, error } = useEpisodeDetails(episodeIdNum);
   const playMutation = usePlayEpisode();
+  const { setItems } = useBreadcrumbs();
+
+  // Set breadcrumbs when episode data is loaded
+  useEffect(() => {
+    if (episode) {
+      const seasonLabel = episode.season === 0 ? 'Specials' : `Season ${String(episode.season)}`;
+      setItems([
+        { label: 'TV Shows', href: '/tv' },
+        { label: episode.showtitle || 'TV Show', href: `/tv/${tvshowId ?? ''}` },
+        { label: seasonLabel, href: `/tv/${tvshowId ?? ''}/${season ?? ''}` },
+        { label: episode.title },
+      ]);
+    } else if (tvshowId && season) {
+      const seasonNum = parseInt(season, 10);
+      const seasonLabel = seasonNum === 0 ? 'Specials' : `Season ${String(seasonNum)}`;
+      setItems([
+        { label: 'TV Shows', href: '/tv' },
+        { label: 'Loading...', href: `/tv/${tvshowId}` },
+        { label: seasonLabel, href: `/tv/${tvshowId}/${season}` },
+        { label: 'Loading...' },
+      ]);
+    }
+  }, [episode, tvshowId, season, setItems]);
 
   if (isLoading) {
     return (
@@ -38,12 +63,6 @@ export function EpisodeDetails() {
   if (isError || !episode) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Link to="/tv/$tvshowId/$season" params={{ tvshowId, season }}>
-          <Button variant="ghost" size="sm" className="mb-4 gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Season
-          </Button>
-        </Link>
         <div className="border-destructive bg-destructive/10 rounded-lg border p-6">
           <h2 className="text-destructive mb-2 text-lg font-semibold">Error loading episode</h2>
           <p className="text-muted-foreground text-sm">
@@ -79,13 +98,6 @@ export function EpisodeDetails() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
-        <Link to="/tv/$tvshowId/$season" params={{ tvshowId, season }}>
-          <Button variant="ghost" size="sm" className="mb-6 gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Season {season}
-          </Button>
-        </Link>
-
         <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
           {/* Poster */}
           <div className="lg:sticky lg:top-8 lg:self-start">

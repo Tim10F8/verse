@@ -1,11 +1,11 @@
-import { useParams, Link } from '@tanstack/react-router';
-import { ArrowLeft } from 'lucide-react';
+import { useParams } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useTVShowDetails } from '@/api/hooks/useTVShowDetails';
 import { useEpisodesBySeason } from '@/api/hooks/useEpisodes';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MediaImage } from '@/components/media/MediaImage';
 import { EpisodeList } from './EpisodeList';
+import { useBreadcrumbs } from '@/components/layout/BreadcrumbContext';
 import { getFanartUrl, getClearLogoUrl } from '@/lib/image-utils';
 
 export function SeasonDetails() {
@@ -21,6 +21,26 @@ export function SeasonDetails() {
     isError,
     error,
   } = useEpisodesBySeason(tvshowIdNum, seasonNum);
+  const { setItems } = useBreadcrumbs();
+
+  // Set breadcrumbs when data is loaded
+  useEffect(() => {
+    if (tvshow) {
+      const seasonLabel = seasonNum === 0 ? 'Specials' : `Season ${String(seasonNum)}`;
+      setItems([
+        { label: 'TV Shows', href: '/tv' },
+        { label: tvshow.title, href: `/tv/${tvshowId ?? ''}` },
+        { label: seasonLabel },
+      ]);
+    } else if (tvshowId && season) {
+      const seasonLabel = seasonNum === 0 ? 'Specials' : `Season ${String(seasonNum)}`;
+      setItems([
+        { label: 'TV Shows', href: '/tv' },
+        { label: 'Loading...', href: `/tv/${tvshowId}` },
+        { label: seasonLabel },
+      ]);
+    }
+  }, [tvshow, tvshowId, season, seasonNum, setItems]);
 
   if (!tvshowId || !season) {
     return (
@@ -56,12 +76,6 @@ export function SeasonDetails() {
   if (isError || !episodes || !tvshow) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Link to="/tv/$tvshowId" params={{ tvshowId }}>
-          <Button variant="ghost" size="sm" className="mb-4 gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to TV Show
-          </Button>
-        </Link>
         <div className="border-destructive bg-destructive/10 rounded-lg border p-6">
           <h2 className="text-destructive mb-2 text-lg font-semibold">Error loading season</h2>
           <p className="text-muted-foreground text-sm">
@@ -107,22 +121,14 @@ export function SeasonDetails() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
-        <Link to="/tv/$tvshowId" params={{ tvshowId }}>
-          <Button variant="ghost" size="sm" className="mb-6 gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to {tvshow.title}
-          </Button>
-        </Link>
-
         <div className="space-y-6">
           {/* Title */}
           <div>
             <h1 className="mb-2 text-4xl font-bold">
               {seasonNum === 0 ? 'Specials' : `Season ${String(seasonNum)}`}
             </h1>
-            <p className="text-muted-foreground text-lg">{tvshow.title}</p>
             {totalEpisodes > 0 && (
-              <p className="text-muted-foreground mt-2 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {watchedEpisodes}/{totalEpisodes} episodes watched
               </p>
             )}

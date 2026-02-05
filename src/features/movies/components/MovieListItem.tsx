@@ -24,7 +24,7 @@ export function MovieListItem({ movie, className }: MovieListItemProps) {
     <Link
       to="/movies/$movieId"
       params={{ movieId: movie.movieid.toString() }}
-      className={cn('group', className)}
+      className={cn('group block', className)}
     >
       <div className="bg-card hover:bg-accent flex gap-4 rounded-lg border p-3 transition-colors">
         {/* Poster thumbnail */}
