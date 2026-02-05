@@ -21,7 +21,7 @@ export function MovieCard({ movie, className }: MovieCardProps) {
     <Link
       to="/movies/$movieId"
       params={{ movieId: movie.movieid.toString() }}
-      className={cn('group', className)}
+      className={cn('group block w-full', className)}
     >
       <Card className="overflow-hidden border-0 bg-transparent shadow-none transition-transform duration-300 hover:scale-105">
         <CardContent className="p-0">
@@ -29,12 +29,8 @@ export function MovieCard({ movie, className }: MovieCardProps) {
             <MediaPoster art={movie.art} title={movie.title} />
 
             {/* Watched indicator */}
-            <div className="absolute right-2 top-2">
-              <WatchedIndicator
-                playcount={movie.playcount}
-                resume={movie.resume}
-                variant="icon"
-              />
+            <div className="absolute top-2 right-2">
+              <WatchedIndicator playcount={movie.playcount} resume={movie.resume} variant="icon" />
             </div>
 
             {/* Rating badge */}
@@ -49,10 +45,10 @@ export function MovieCard({ movie, className }: MovieCardProps) {
           </div>
 
           <div className="mt-2 space-y-1 px-1">
-            <h3 className="line-clamp-2 font-semibold leading-tight group-hover:text-primary">
+            <h3 className="group-hover:text-primary line-clamp-2 leading-tight font-semibold">
               {movie.title}
             </h3>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-2 text-sm">
               {year && <span>{year}</span>}
               {movie.genre && movie.genre.length > 0 && (
                 <>

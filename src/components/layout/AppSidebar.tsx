@@ -13,6 +13,7 @@ import {
   Music,
   Disc3,
   ListMusic,
+  Home,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { KodiLogo } from '@/components/icons/KodiLogo';
@@ -56,6 +57,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Home">
+                  <Link
+                    to="/"
+                    activeProps={{
+                      className: 'bg-sidebar-accent text-sidebar-accent-foreground font-medium',
+                    }}
+                    activeOptions={{ exact: true }}
+                  >
+                    <Home />
+                    <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         <SidebarGroup>
           <SidebarGroupLabel>Library</SidebarGroupLabel>
           <SidebarGroupContent>

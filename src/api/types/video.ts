@@ -98,7 +98,7 @@ export interface KodiEpisode extends KodiMediaBase {
   episodeid: number;
   episode: number;
   season: number;
-  tvshowid: number;
+  tvshowid?: number;
   title: string;
   originaltitle?: string;
   showtitle?: string;

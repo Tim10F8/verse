@@ -152,4 +152,6 @@ Configure Kodi connection in `.env.local` (copy from `.env.example`):
 
 ### Firefox MCP Usage
 
-- **ALWAYS ask for user confirmation before taking screenshots** using the Firefox MCP tools (`mcp__firefox-devtools__screenshot_page`, `mcp__firefox-devtools__screenshot_by_uid`). Do this EVERY TIME, even if a screenshot was recently taken or seems obviously needed. Never assume permission.
+- **NEVER take screenshots directly** - screenshots fill the context window quickly. Instead, ALWAYS delegate screenshot tasks to an agent using the Task tool. The agent can take screenshots, analyze them, and return a text summary of what it observed.
+- If you need to verify UI rendering, use `Task` with an agent that has access to Firefox MCP tools to take and analyze the screenshot, then report back findings.
+- Only take screenshots directly if the user explicitly requests to see the screenshot themselves in the conversation.
