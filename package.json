@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:kodi": "npm run build && rm -rf \"$HOME/Library/Application Support/Kodi/addons/webinterface.verse\" && cp -r dist \"$HOME/Library/Application Support/Kodi/addons/webinterface.verse\"",
+    "release": "bash scripts/release.sh",
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest --watch",
