@@ -156,14 +156,14 @@ export function TVShowList() {
     <div className="container space-y-4 py-6">
       {/* Header */}
       <div className="flex items-center justify-end gap-2">
-        <div className="bg-muted/50 flex h-11 items-center rounded-lg px-3">
+        <div className="bg-muted/50 flex h-11 items-center rounded-lg border px-3">
           <p className="text-muted-foreground text-sm">
             {tvshows.length !== totalCount
               ? `${tvshows.length.toLocaleString()} of ${totalCount.toLocaleString()} TV shows`
               : `${totalCount.toLocaleString()} TV shows`}
           </p>
         </div>
-        <ViewToggle value={viewMode} onChange={setViewMode} />
+        <ViewToggle value={viewMode} onChange={setViewMode} className="border" />
       </div>
 
       {/* TV Shows Grid/List */}
