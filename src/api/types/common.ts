@@ -14,6 +14,16 @@ export interface KodiArt {
   landscape?: string;
   thumb?: string;
   icon?: string;
+  // Episode art includes parent TV show artwork with prefixes
+  'tvshow.poster'?: string;
+  'tvshow.fanart'?: string;
+  'tvshow.banner'?: string;
+  'tvshow.clearart'?: string;
+  'tvshow.clearlogo'?: string;
+  'tvshow.landscape'?: string;
+  'tvshow.icon'?: string;
+  'season.poster'?: string;
+  'season.banner'?: string;
 }
 
 /**

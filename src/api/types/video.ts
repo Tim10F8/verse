@@ -133,7 +133,7 @@ export interface KodiMovieSet {
  * Response from VideoLibrary.GetMovies
  */
 export interface GetMoviesResponse {
-  movies: KodiMovie[];
+  movies?: KodiMovie[];
   limits: {
     start: number;
     end: number;

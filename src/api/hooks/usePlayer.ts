@@ -222,6 +222,7 @@ interface PlayEpisodeOptions {
   title?: string;
   season?: number;
   episode?: number;
+  resume?: boolean;
 }
 
 /**

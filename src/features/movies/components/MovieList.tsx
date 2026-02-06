@@ -25,7 +25,7 @@ export function MovieList() {
   const [viewMode, setViewMode] = useViewMode('movies', 'grid');
 
   // Flatten all pages into a single array
-  const allMovies = data?.pages.flatMap((page) => page.movies) || [];
+  const allMovies = data?.pages.flatMap((page) => page.movies ?? []) ?? [];
 
   // Get the total count from Kodi's API response
   const kodiTotal = data?.pages[0]?.total;

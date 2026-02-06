@@ -4,13 +4,14 @@ import { Button } from '@/components/ui/button';
 import { usePlay, useSetMovieWatched } from '@/api/hooks/usePlayback';
 import type { KodiMovie } from '@/api/types/video';
 import { toast } from 'sonner';
-import { ImageIcon, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface MovieActionsProps {
   movie: KodiMovie;
+  compact?: boolean;
 }
 
-export function MovieActions({ movie }: MovieActionsProps) {
+export function MovieActions({ movie, compact = false }: MovieActionsProps) {
   const playMutation = usePlay();
   const setWatchedMutation = useSetMovieWatched();
 
@@ -41,13 +42,21 @@ export function MovieActions({ movie }: MovieActionsProps) {
     });
   };
 
-  const handleEditArtwork = () => {
-    // TODO: Implement artwork editor dialog with TMDB and Fanart.TV integration
-    toast.info('Coming Soon', {
-      description:
-        'Artwork editor will allow you to fetch and change artwork from TMDB and Fanart.TV',
-    });
-  };
+  // Compact mode: just the play button for the hero section
+  if (compact) {
+    return (
+      <div className="flex gap-2">
+        <PlayButton onClick={() => void handlePlay(false)} disabled={playMutation.isPending} />
+        {hasResume && movie.resume && (
+          <ResumeButton
+            resume={movie.resume}
+            onClick={() => void handlePlay(true)}
+            disabled={playMutation.isPending}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-wrap gap-3">
@@ -75,11 +84,6 @@ export function MovieActions({ movie }: MovieActionsProps) {
       >
         {isWatched ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
         {isWatched ? 'Mark Unwatched' : 'Mark Watched'}
-      </Button>
-
-      <Button variant="outline" size="lg" onClick={handleEditArtwork} className="gap-2">
-        <ImageIcon className="h-5 w-5" />
-        Edit Artwork
       </Button>
     </div>
   );

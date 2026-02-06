@@ -45,7 +45,7 @@ export function VirtualGrid<T>({
     >
       <div
         style={{
-          height: `${virtualizer.getTotalSize()}px`,
+          height: `${String(virtualizer.getTotalSize())}px`,
           width: '100%',
           position: 'relative',
         }}
@@ -62,14 +62,14 @@ export function VirtualGrid<T>({
                 top: 0,
                 left: 0,
                 width: '100%',
-                transform: `translateY(${virtualRow.start}px)`,
+                transform: `translateY(${String(virtualRow.start)}px)`,
               }}
             >
               <div
                 className="grid"
                 style={{
-                  gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
-                  gap: `${gap}px`,
+                  gridTemplateColumns: `repeat(${String(columnCount)}, 1fr)`,
+                  gap: `${String(gap)}px`,
                 }}
               >
                 {rowItems.map((item, itemIndex) => (

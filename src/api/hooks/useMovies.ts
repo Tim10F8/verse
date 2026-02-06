@@ -34,7 +34,7 @@ export function useMovies(
         },
         signal
       );
-      return response.movies || [];
+      return response.movies ?? [];
     },
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes - keep data cached longer

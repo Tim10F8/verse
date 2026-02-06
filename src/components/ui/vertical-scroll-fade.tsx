@@ -63,7 +63,11 @@ export function VerticalScrollFade({
       />
 
       {/* Scroll container */}
-      <div ref={scrollRef} className={cn('min-w-0 flex-1 overflow-auto', className)}>
+      <div
+        ref={scrollRef}
+        data-scroll-container
+        className={cn('min-w-0 flex-1 overflow-auto', className)}
+      >
         {children}
       </div>
 
