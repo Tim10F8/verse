@@ -1105,24 +1105,27 @@ export class KodiWebSocket {
 
 ## Current Status
 
-Phases 0-3 are complete. The application has working video and music libraries with full player controls, real-time WebSocket updates, and keyboard shortcuts. It builds as a Kodi addon and runs as a standalone web app during development.
+Phases 0-3 and Phase 5 are complete. The application has working video and music libraries with full player controls, global search, real-time WebSocket updates, and keyboard shortcuts. It builds as a Kodi addon and runs as a standalone web app during development.
 
 ### What's Done
 
 - Foundation: React 19 + TypeScript + Vite 7 + TanStack Router/Query + shadcn/ui
-- Movies: browse, search, filter, sort, detail pages, watched toggle, play/resume
+- Movies: browse, search, filter (genre/tag/watched), sort, detail pages, watched toggle, play/resume
 - TV Shows: browse with seasons and episodes, detail pages, watched toggle
 - Music: artists, albums, songs with browse/search/filter/sort, detail pages, play/queue
 - Player: footer bar, full player page, seek, volume, queue, keyboard shortcuts
+- Search: global command palette (Cmd+K), search history, genre/tag filtering
+- TMDB Integration: fetch and manage artwork for movies and TV shows
 - WebSocket: real-time sync with Kodi notifications (video + audio libraries)
+- UI: ported layouts from Coredeck, softer color palette, amber play buttons, improved dark mode
 - Testing: 127 tests across 9 test files, all passing
-- Build: TypeScript strict mode, ESLint strict type-checked, production build ~533KB JS + 63KB CSS
+- Build: TypeScript strict mode, ESLint strict type-checked, production build ~644KB JS + 72KB CSS
 
 ### Next Steps
 
-1. **Phase 4: Playlists** — Advanced queue management, drag-to-reorder
-2. **Phase 5: Search** — ✅ Global search complete; fuzzy search and discovery features pending
-3. **Phase 6: Settings** — Connection settings, UI preferences
+1. **Phase 4: Playlists** — Advanced queue management, drag-to-reorder, save/import/export
+2. **Phase 6: Settings** — Connection settings, UI preferences
+3. **Phase 7: Live TV/PVR** — Channel list, EPG, recordings
 4. Local browser streaming (dual player mode) — stretch goal
 
 ---

@@ -5,6 +5,7 @@ export interface MovieFilters {
   search: string;
   genre?: string;
   year?: string;
+  tag?: string;
   watched?: boolean;
   sortBy: 'title' | 'year' | 'rating' | 'dateadded';
   sortOrder: 'asc' | 'desc';
@@ -36,6 +37,15 @@ export function useMovieFilters(movies: KodiMovie[], kodiTotal?: number) {
     return Array.from(yearSet).sort((a, b) => parseInt(b) - parseInt(a));
   }, [movies]);
 
+  // Get unique tags
+  const tags = useMemo(() => {
+    const tagSet = new Set<string>();
+    movies.forEach((movie) => {
+      movie.tag?.forEach((t) => tagSet.add(t));
+    });
+    return Array.from(tagSet).sort();
+  }, [movies]);
+
   // Filter and sort movies
   const filteredMovies = useMemo(() => {
     let result = [...movies];
@@ -63,6 +73,12 @@ export function useMovieFilters(movies: KodiMovie[], kodiTotal?: number) {
         const year = movie.year?.toString() || movie.premiered?.substring(0, 4);
         return year === filters.year;
       });
+    }
+
+    // Apply tag filter
+    if (filters.tag) {
+      const tag = filters.tag;
+      result = result.filter((movie) => movie.tag?.includes(tag));
     }
 
     // Apply watched filter
@@ -104,6 +120,7 @@ export function useMovieFilters(movies: KodiMovie[], kodiTotal?: number) {
     filteredMovies,
     genres,
     years,
+    tags,
     totalCount: kodiTotal ?? movies.length,
     filteredCount: filteredMovies.length,
   };

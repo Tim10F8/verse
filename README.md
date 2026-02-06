@@ -22,6 +22,8 @@ A modern, fast, and beautiful web interface for Kodi
 - **Keyboard Shortcuts** — Space, arrows, and letter keys for power users
 - **Playlist Queue** — View, reorder, and manage the current playback queue
 - **Dark Mode** — Clean, accessible interface with dark/light/system theme
+- **TMDB Artwork Integration** — Fetch and manage artwork directly from The Movie Database
+- **Tag Filtering** — Filter media by custom tags (shown only if tags exist)
 - **Kodi Addon Packaging** — Installable as a Kodi addon
 
 ### Planned Features
@@ -216,20 +218,32 @@ Contributions are welcome!
 - Search, genre filtering, and sorting
 - Play and queue controls for Kodi mode
 
-### Phase 5: Global Search — COMPLETE
+### Phase 5: Search & Discovery — COMPLETE
 
 - Command palette (Cmd+K / Ctrl+K) for instant search
 - Search across movies, TV shows, episodes, artists, albums, and songs
 - Recent search history with localStorage persistence
+- Genre filtering on all library views
+- Tag filtering (shown only if tags exist in your library)
+
+### UI Refinements (v0.4.0)
+
+- Ported detail page and list view layouts from Coredeck
+- TMDB artwork integration for fetching and managing artwork
+- Softer color palette for light and dark modes
+- Amber play button for better visibility
+- Improved borders and visual consistency
+- Debounced search inputs
 
 ### Coming Later
 
-- Playlists & advanced queue management
-- Settings management
+- Playlists & advanced queue management (drag-to-reorder, save, import/export)
+- Settings management (connection settings, UI preferences)
 - Live TV/PVR
 - Add-ons
 - Local browser streaming (dual player mode)
 - PWA features
+- Internationalization (80+ languages)
 
 [View complete roadmap](PROJECT_PLAN.md)
 

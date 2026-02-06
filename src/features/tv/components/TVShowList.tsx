@@ -34,6 +34,7 @@ export function TVShowList() {
   const [searchInput, setSearchInput] = useState('');
   const searchQuery = useDebounce(searchInput, 300);
   const [selectedGenre, setSelectedGenre] = useState<string>('all');
+  const [selectedTag, setSelectedTag] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('title');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [viewMode, setViewMode] = useViewMode('tvshows', 'list');
@@ -105,6 +106,17 @@ export function TVShowList() {
   });
   const genres = Array.from(allGenres).sort();
 
+  // Extract unique tags for filter
+  const allTags = new Set<string>();
+  tvshows.forEach((show) => {
+    show.tag?.forEach((t) => allTags.add(t));
+  });
+  const tags = Array.from(allTags).sort();
+
+  // Apply client-side tag filter
+  const filteredTVShows =
+    selectedTag === 'all' ? tvshows : tvshows.filter((show) => show.tag?.includes(selectedTag));
+
   const handleSort = (field: string) => {
     if (sortBy === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -163,7 +175,10 @@ export function TVShowList() {
       </div>
 
       {/* TV Shows Grid/List */}
-      {tvshows.length === 0 && !searchInput && selectedGenre === 'all' ? (
+      {filteredTVShows.length === 0 &&
+      !searchInput &&
+      selectedGenre === 'all' &&
+      selectedTag === 'all' ? (
         <div className="bg-muted/50 rounded-lg border p-12 text-center">
           <h2 className="mb-2 text-xl font-semibold">No TV shows found</h2>
           <p className="text-muted-foreground">Your TV show library is empty.</p>
@@ -204,6 +219,22 @@ export function TVShowList() {
                             ))}
                           </SelectContent>
                         </Select>
+
+                        {tags.length > 0 && (
+                          <Select value={selectedTag} onValueChange={setSelectedTag}>
+                            <SelectTrigger className="w-40">
+                              <SelectValue placeholder="Tag" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Tags</SelectItem>
+                              {tags.map((tag) => (
+                                <SelectItem key={tag} value={tag}>
+                                  {tag}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
                       </div>
                     </TableHead>
                   </TableRow>
@@ -256,7 +287,7 @@ export function TVShowList() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {tvshows.map((tvshow) => {
+                  {filteredTVShows.map((tvshow) => {
                     const posterUrl = getPosterUrl(tvshow.art);
                     const year = formatYear(tvshow.year ?? tvshow.premiered);
                     const rating = tvshow.rating ? formatRating(tvshow.rating) : null;
@@ -321,7 +352,7 @@ export function TVShowList() {
                       </TableRow>
                     );
                   })}
-                  {tvshows.length === 0 && (
+                  {filteredTVShows.length === 0 && (
                     <TableRow>
                       <TableCell colSpan={8} className="text-muted-foreground py-8 text-center">
                         No TV shows found
@@ -361,10 +392,26 @@ export function TVShowList() {
                     ))}
                   </SelectContent>
                 </Select>
+
+                {tags.length > 0 && (
+                  <Select value={selectedTag} onValueChange={setSelectedTag}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Tags</SelectItem>
+                      {tags.map((tag) => (
+                        <SelectItem key={tag} value={tag}>
+                          {tag}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
 
               <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8">
-                {tvshows.map((tvshow) => (
+                {filteredTVShows.map((tvshow) => (
                   <TVShowCard key={tvshow.tvshowid} tvshow={tvshow} />
                 ))}
               </div>

@@ -47,7 +47,7 @@ export function MovieList() {
   // Get the total count from Kodi's API response
   const kodiTotal = data?.pages[0]?.total;
 
-  const { filters, setFilters, filteredMovies, genres, totalCount } = useMovieFilters(
+  const { filters, setFilters, filteredMovies, genres, tags, totalCount } = useMovieFilters(
     allMovies,
     kodiTotal
   );
@@ -191,6 +191,30 @@ export function MovieList() {
                               {genres.map((genre) => (
                                 <SelectItem key={genre} value={genre}>
                                   {genre}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+
+                        {tags.length > 0 && (
+                          <Select
+                            value={filters.tag ?? 'all'}
+                            onValueChange={(value) => {
+                              setFilters({
+                                ...filters,
+                                tag: value === 'all' ? undefined : value,
+                              });
+                            }}
+                          >
+                            <SelectTrigger className="w-40">
+                              <SelectValue placeholder="Tag" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Tags</SelectItem>
+                              {tags.map((tag) => (
+                                <SelectItem key={tag} value={tag}>
+                                  {tag}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -381,6 +405,27 @@ export function MovieList() {
                       {genres.map((genre) => (
                         <SelectItem key={genre} value={genre}>
                           {genre}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+
+                {tags.length > 0 && (
+                  <Select
+                    value={filters.tag ?? 'all'}
+                    onValueChange={(value) => {
+                      setFilters({ ...filters, tag: value === 'all' ? undefined : value });
+                    }}
+                  >
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Tags</SelectItem>
+                      {tags.map((tag) => (
+                        <SelectItem key={tag} value={tag}>
+                          {tag}
                         </SelectItem>
                       ))}
                     </SelectContent>
