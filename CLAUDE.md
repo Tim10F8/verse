@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Verse** is a modern web interface for Kodi, succeeding Chorus2. It's a full rewrite using React, TypeScript, and Vite. The name "Verse" represents what comes after the Chorus in a song.
+**Verse** is a modern web interface for Kodi built with React, TypeScript, and Vite. The name "Verse" represents what comes after the Chorus in a song.
 
-The legacy Chorus2 code (CoffeeScript/Backbone/Marionette) lives in the `legacy/` directory and is excluded from linting. All new development is in the modern stack. See `PROJECT_PLAN.md` for the full roadmap and current progress.
+See `PROJECT_PLAN.md` for the full roadmap and current progress.
 
-**Current status**: Phase 0 (Foundation) is complete. Phase 1 (Movies & TV Shows) is in progress with movie browsing, TV shows, seasons, and episodes implemented.
+**Current status**: Core features complete (Movies, TV Shows, Music, Player, Search, Settings). Active development continues.
 
 ## Development Commands
 

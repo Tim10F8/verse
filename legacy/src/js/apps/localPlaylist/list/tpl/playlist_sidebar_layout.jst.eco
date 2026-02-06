@@ -1,2 +1,0 @@
-<div class="current-lists"></div>
-<div class="new-list"><%= tr('New playlist') %></div>

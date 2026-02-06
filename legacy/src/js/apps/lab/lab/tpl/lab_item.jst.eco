@@ -1,4 +1,0 @@
-<a class="lab-item" href="#<%= @path %>">
-    <h4><%= @title %></h4>
-    <p><%= @description %></p>
-</a>

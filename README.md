@@ -10,7 +10,7 @@ A modern, fast, and beautiful web interface for Kodi
 
 ## Overview
 
-**Verse** is a web interface for Kodi built from the ground up with modern web technologies. It provides a fast, responsive alternative to Chorus2 that meets contemporary expectations while being easier to maintain and extend.
+**Verse** is a web interface for Kodi built from the ground up with modern web technologies. It provides a fast, responsive experience that meets contemporary expectations while being easy to maintain and extend.
 
 ### Current Features
 
@@ -24,6 +24,7 @@ A modern, fast, and beautiful web interface for Kodi
 - **Dark Mode** — Clean, accessible interface with dark/light/system theme
 - **TMDB Artwork Integration** — Fetch and manage artwork directly from The Movie Database
 - **Tag Filtering** — Filter media by custom tags (shown only if tags exist)
+- **Kodi Settings Management** — Configure Kodi settings directly from the web interface
 - **Kodi Addon Packaging** — Installable as a Kodi addon
 
 ### Planned Features
@@ -38,8 +39,6 @@ A modern, fast, and beautiful web interface for Kodi
 ---
 
 ## Why Verse?
-
-Chorus2 has served Kodi users well, but its technology stack (CoffeeScript, Backbone, Marionette) makes it increasingly difficult to maintain and enhance. Verse addresses this with:
 
 - **Modern Stack**: React 19, TypeScript, Vite 7 — technologies that attract contributors
 - **Type Safety**: Full TypeScript with strict mode prevents bugs and improves maintainability

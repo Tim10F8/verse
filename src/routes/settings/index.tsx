@@ -172,8 +172,8 @@ function Settings() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-sm">
-            Verse is a modern web interface for Kodi, succeeding Chorus2. Built with React,
-            TypeScript, and Tailwind CSS.
+            Verse is a modern web interface for Kodi. Built with React, TypeScript, and Tailwind
+            CSS.
           </p>
           <div className="mt-4 flex gap-4">
             <a

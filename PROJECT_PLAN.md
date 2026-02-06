@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document outlines a comprehensive plan to build **Verse**, a modern web interface for Kodi that succeeds Chorus2. The current implementation uses deprecated technologies (CoffeeScript, Backbone, Marionette) that make it difficult to maintain and attract contributors. With the recent resurgence of Kodi via CoreELEC and renewed enthusiast interest, this modernization will provide users with a web UI that meets modern expectations.
+This document outlines the development plan for **Verse**, a modern web interface for Kodi. With the resurgence of Kodi via CoreELEC and renewed enthusiast interest, Verse provides users with a web UI that meets modern expectations.
 
 **Project Name**: Verse (what comes after the Chorus in a song!)
 
@@ -917,53 +917,6 @@ export class KodiWebSocket {
 - Mobile: iOS 14+, Android 8+
 
 **Polyfills**: Minimal, leveraging modern browser features
-
----
-
-## Migration Strategy
-
-### Parallel Development
-
-1. **Separate Repository**
-   - New repo: `xbmc/verse` or keep current repository
-   - No impact on existing Chorus2 installations
-   - Users can choose which interface to use
-
-2. **Beta Testing**
-   - Early access for community
-   - Feedback collection via GitHub Discussions
-   - Bug reports via Issues
-
-3. **Feature Flags**
-   - Toggle experimental features
-   - A/B testing for UI changes
-   - Gradual rollout
-
-### Deployment Options
-
-1. **Option A: Side-by-side**
-   - Install both interfaces
-   - User switches between them
-   - Allows gradual migration
-
-2. **Option B: Replacement**
-   - Replace Chorus2 after feature parity
-   - Keep Chorus2 available for download
-   - Provide migration guide
-
-### Data Migration
-
-**Settings Migration**:
-
-- Detect legacy localStorage keys
-- Convert to new format
-- Preserve user preferences
-
-**No Data Loss**:
-
-- All data lives in Kodi
-- Settings are UI-only
-- Can switch back to Chorus2 anytime
 
 ---
 
