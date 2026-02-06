@@ -5,6 +5,7 @@ export interface MovieFilters {
   search: string;
   genre?: string;
   year?: string;
+  watched?: boolean;
   sortBy: 'title' | 'year' | 'rating' | 'dateadded';
   sortOrder: 'asc' | 'desc';
 }
@@ -61,6 +62,14 @@ export function useMovieFilters(movies: KodiMovie[], kodiTotal?: number) {
       result = result.filter((movie) => {
         const year = movie.year?.toString() || movie.premiered?.substring(0, 4);
         return year === filters.year;
+      });
+    }
+
+    // Apply watched filter
+    if (filters.watched !== undefined) {
+      result = result.filter((movie) => {
+        const isWatched = (movie.playcount ?? 0) > 0;
+        return filters.watched ? isWatched : !isWatched;
       });
     }
 

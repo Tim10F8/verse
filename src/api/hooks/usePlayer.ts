@@ -217,12 +217,48 @@ export function useSetShuffle() {
   });
 }
 
+interface PlayMovieOptions {
+  movieid: number;
+  title?: string;
+  resume?: boolean;
+}
+
 interface PlayEpisodeOptions {
   episodeid: number;
   title?: string;
   season?: number;
   episode?: number;
   resume?: boolean;
+}
+
+/**
+ * Hook for playing a movie with standardized error handling, notifications, and query invalidation
+ */
+export function usePlayMovie() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (options: PlayMovieOptions) => {
+      await kodi.call('Player.Open', {
+        item: { movieid: options.movieid },
+        options: options.resume ? { resume: true } : undefined,
+      });
+      return options;
+    },
+    onSuccess: (options) => {
+      void queryClient.invalidateQueries({ queryKey: ['movies'] });
+      void queryClient.invalidateQueries({ queryKey: ['movie', options.movieid] });
+
+      toast.success('Playing', {
+        description: options.title ? `Now playing: ${options.title}` : 'Now playing',
+      });
+    },
+    onError: (error) => {
+      toast.error('Playback Error', {
+        description: error instanceof Error ? error.message : 'Failed to start playback',
+      });
+    },
+  });
 }
 
 /**
