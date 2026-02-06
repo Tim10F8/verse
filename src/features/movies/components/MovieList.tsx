@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { MediaCardSkeletonGrid } from '@/components/media/MediaCardSkeleton';
 import { Input } from '@/components/ui/input';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
   Select,
   SelectContent,
@@ -36,6 +37,8 @@ export function MovieList() {
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useViewMode('movies', 'list');
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearch = useDebounce(searchInput, 300);
   const playMovie = usePlayMovie();
 
   // Flatten all pages into a single array
@@ -53,6 +56,11 @@ export function MovieList() {
   useEffect(() => {
     setItems([{ label: 'Movies' }]);
   }, [setItems]);
+
+  // Sync debounced search to filters
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, search: debouncedSearch }));
+  }, [debouncedSearch, setFilters]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -148,9 +156,9 @@ export function MovieList() {
           <Input
             type="search"
             placeholder="Search movies..."
-            value={filters.search}
+            value={searchInput}
             onChange={(e) => {
-              setFilters({ ...filters, search: e.target.value });
+              setSearchInput(e.target.value);
             }}
             className="w-64 pl-8"
           />

@@ -5,6 +5,7 @@ import { TVShowCard } from './TVShowCard';
 import { ViewToggle } from '@/components/media/ViewToggle';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
+import { useDebounce } from '@/hooks/useDebounce';
 import {
   Select,
   SelectContent,
@@ -30,7 +31,8 @@ import { formatRating, formatYear } from '@/lib/format';
 import type { KodiSort, KodiFilter } from '@/api/types/common';
 
 export function TVShowList() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const searchQuery = useDebounce(searchInput, 300);
   const [selectedGenre, setSelectedGenre] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('title');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -172,9 +174,9 @@ export function TVShowList() {
           <Input
             type="text"
             placeholder="Search TV shows..."
-            value={searchQuery}
+            value={searchInput}
             onChange={(e) => {
-              setSearchQuery(e.target.value);
+              setSearchInput(e.target.value);
             }}
             className="w-64 pl-8"
           />
