@@ -16,6 +16,7 @@ import { Route as PlayerIndexRouteImport } from './routes/player/index';
 import { Route as MusicIndexRouteImport } from './routes/music/index';
 import { Route as MoviesIndexRouteImport } from './routes/movies/index';
 import { Route as TvTvshowIdRouteImport } from './routes/tv/$tvshowId';
+import { Route as SettingsKodiRouteImport } from './routes/settings/kodi';
 import { Route as MusicSongsRouteImport } from './routes/music/songs';
 import { Route as MusicAlbumsRouteImport } from './routes/music/albums';
 import { Route as MusicArtistIdRouteImport } from './routes/music/$artistId';
@@ -57,6 +58,11 @@ const MoviesIndexRoute = MoviesIndexRouteImport.update({
 const TvTvshowIdRoute = TvTvshowIdRouteImport.update({
   id: '/tv/$tvshowId',
   path: '/tv/$tvshowId',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const SettingsKodiRoute = SettingsKodiRouteImport.update({
+  id: '/settings/kodi',
+  path: '/settings/kodi',
   getParentRoute: () => rootRouteImport,
 } as any);
 const MusicSongsRoute = MusicSongsRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/music/$artistId': typeof MusicArtistIdRouteWithChildren;
   '/music/albums': typeof MusicAlbumsRoute;
   '/music/songs': typeof MusicSongsRoute;
+  '/settings/kodi': typeof SettingsKodiRoute;
   '/tv/$tvshowId': typeof TvTvshowIdRouteWithChildren;
   '/movies/': typeof MoviesIndexRoute;
   '/music/': typeof MusicIndexRoute;
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/music/$artistId': typeof MusicArtistIdRouteWithChildren;
   '/music/albums': typeof MusicAlbumsRoute;
   '/music/songs': typeof MusicSongsRoute;
+  '/settings/kodi': typeof SettingsKodiRoute;
   '/tv/$tvshowId': typeof TvTvshowIdRouteWithChildren;
   '/movies': typeof MoviesIndexRoute;
   '/music': typeof MusicIndexRoute;
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/music/$artistId': typeof MusicArtistIdRouteWithChildren;
   '/music/albums': typeof MusicAlbumsRoute;
   '/music/songs': typeof MusicSongsRoute;
+  '/settings/kodi': typeof SettingsKodiRoute;
   '/tv/$tvshowId': typeof TvTvshowIdRouteWithChildren;
   '/movies/': typeof MoviesIndexRoute;
   '/music/': typeof MusicIndexRoute;
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/music/$artistId'
     | '/music/albums'
     | '/music/songs'
+    | '/settings/kodi'
     | '/tv/$tvshowId'
     | '/movies/'
     | '/music/'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/music/$artistId'
     | '/music/albums'
     | '/music/songs'
+    | '/settings/kodi'
     | '/tv/$tvshowId'
     | '/movies'
     | '/music'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/music/$artistId'
     | '/music/albums'
     | '/music/songs'
+    | '/settings/kodi'
     | '/tv/$tvshowId'
     | '/movies/'
     | '/music/'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   MusicArtistIdRoute: typeof MusicArtistIdRouteWithChildren;
   MusicAlbumsRoute: typeof MusicAlbumsRoute;
   MusicSongsRoute: typeof MusicSongsRoute;
+  SettingsKodiRoute: typeof SettingsKodiRoute;
   TvTvshowIdRoute: typeof TvTvshowIdRouteWithChildren;
   MoviesIndexRoute: typeof MoviesIndexRoute;
   MusicIndexRoute: typeof MusicIndexRoute;
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/tv/$tvshowId';
       fullPath: '/tv/$tvshowId';
       preLoaderRoute: typeof TvTvshowIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/settings/kodi': {
+      id: '/settings/kodi';
+      path: '/settings/kodi';
+      fullPath: '/settings/kodi';
+      preLoaderRoute: typeof SettingsKodiRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/music/songs': {
@@ -342,6 +362,7 @@ const rootRouteChildren: RootRouteChildren = {
   MusicArtistIdRoute: MusicArtistIdRouteWithChildren,
   MusicAlbumsRoute: MusicAlbumsRoute,
   MusicSongsRoute: MusicSongsRoute,
+  SettingsKodiRoute: SettingsKodiRoute,
   TvTvshowIdRoute: TvTvshowIdRouteWithChildren,
   MoviesIndexRoute: MoviesIndexRoute,
   MusicIndexRoute: MusicIndexRoute,

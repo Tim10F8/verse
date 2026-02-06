@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
-import { Key, ExternalLink, Check, Loader2, AlertCircle } from 'lucide-react';
+import {
+  Key,
+  ExternalLink,
+  Check,
+  Loader2,
+  AlertCircle,
+  Settings as SettingsIcon,
+  ChevronRight,
+} from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,6 +70,25 @@ function Settings() {
         <h1 className="text-3xl font-bold">Settings</h1>
         <p className="text-muted-foreground mt-1">Configure Verse preferences and API keys</p>
       </div>
+
+      {/* Kodi Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <SettingsIcon className="h-5 w-5" />
+            Kodi Settings
+          </CardTitle>
+          <CardDescription>Configure your Kodi media center directly from Verse</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Link to="/settings/kodi">
+            <Button variant="outline" className="w-full justify-between">
+              Open Kodi Settings
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
 
       {/* API Keys Section */}
       <Card>
