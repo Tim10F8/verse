@@ -7,7 +7,7 @@ interface PlayButtonProps {
   disabled?: boolean;
   className?: string;
   size?: 'default' | 'sm' | 'lg' | 'icon';
-  variant?: 'default' | 'secondary' | 'outline' | 'ghost';
+  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'play';
 }
 
 export function PlayButton({
@@ -15,7 +15,7 @@ export function PlayButton({
   disabled = false,
   className,
   size = 'default',
-  variant = 'default',
+  variant = 'play',
 }: PlayButtonProps) {
   return (
     <Button
