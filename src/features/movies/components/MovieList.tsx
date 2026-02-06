@@ -137,8 +137,8 @@ export function MovieList() {
   return (
     <div className="container space-y-4 py-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="bg-muted/50 rounded-lg px-3 py-1.5">
+      <div className="flex items-center justify-end gap-2">
+        <div className="bg-muted/50 flex h-11 items-center rounded-lg px-3">
           <p className="text-muted-foreground text-sm">
             {filteredCount !== totalCount
               ? `${filteredCount.toLocaleString()} of ${totalCount.toLocaleString()} movies`
