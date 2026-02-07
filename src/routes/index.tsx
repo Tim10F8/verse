@@ -37,7 +37,7 @@ function HomePage() {
             label="TV Shows"
             value={
               stats
-                ? `${stats.tvshows.toLocaleString()} shows / ${stats.episodes.toLocaleString()} episodes`
+                ? `${stats.tvshows.toLocaleString()} shows \u00b7 ${stats.episodes.toLocaleString()} episodes`
                 : undefined
             }
             isLoading={statsLoading}

@@ -23,7 +23,7 @@ export function StatsCard({ icon: Icon, label, value, isLoading, href }: StatsCa
         {isLoading ? (
           <Skeleton className="mt-1 h-7 w-16" />
         ) : (
-          <p className={cn('font-bold', typeof value === 'string' ? 'text-lg' : 'text-2xl')}>
+          <p className="text-2xl font-bold">
             {typeof value === 'number' ? value.toLocaleString() : (value ?? '0')}
           </p>
         )}
