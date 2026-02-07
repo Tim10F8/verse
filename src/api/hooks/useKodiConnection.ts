@@ -26,3 +26,21 @@ export function useKodiVersion() {
     staleTime: Infinity, // Version doesn't change
   });
 }
+
+/**
+ * Hook to get the Kodi device's friendly name
+ */
+export function useKodiDeviceName() {
+  return useQuery({
+    queryKey: ['kodi', 'deviceName'],
+    queryFn: async ({ signal }) => {
+      const result = await kodi.call<Record<string, string>>(
+        'XBMC.GetInfoLabels',
+        { labels: ['System.FriendlyName'] },
+        signal
+      );
+      return result['System.FriendlyName'] || 'Kodi';
+    },
+    staleTime: Infinity,
+  });
+}

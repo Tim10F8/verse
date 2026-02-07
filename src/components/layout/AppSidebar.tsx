@@ -6,6 +6,7 @@ import { Settings, Sun, Moon, Wifi, WifiOff, ChevronsUpDown } from 'lucide-react
 import { useTheme } from 'next-themes';
 import { KodiLogo } from '@/components/icons/KodiLogo';
 import { useKodiConnectionStatus } from '@/api/hooks/useKodiWebSocket';
+import { useKodiDeviceName } from '@/api/hooks/useKodiConnection';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { type NavItem, useSidebarNavigation } from '@/components/layout/navigation';
@@ -155,6 +156,7 @@ function UserMenu({ collapsed, isConnected, theme, toggleTheme }: UserMenuProps)
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { theme, setTheme } = useTheme();
   const isConnected = useKodiConnectionStatus();
+  const { data: deviceName } = useKodiDeviceName();
   const location = useLocation();
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
@@ -176,7 +178,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           )}
         >
           <KodiLogo className="h-6 w-6 shrink-0" />
-          {!collapsed && <span>Verse</span>}
+          {!collapsed && <span className="truncate">{deviceName ?? 'Verse'}</span>}
         </Link>
       </SidebarHeader>
 
