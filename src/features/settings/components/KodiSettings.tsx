@@ -8,7 +8,6 @@ import {
 import { SettingInput } from '@/components/settings/SettingInput';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -17,7 +16,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  SidebarMenuSkeleton,
+} from '@/components/ui/sidebar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useBreadcrumbs } from '@/components/layout/BreadcrumbContext';
 import {
   Settings,
@@ -30,8 +38,9 @@ import {
   Globe,
   Server,
   AlertCircle,
+  ChevronRight,
 } from 'lucide-react';
-import type { SettingLevel, KodiSetting } from '@/api/types/settings';
+import type { SettingLevel, KodiSettingSection, KodiSetting } from '@/api/types/settings';
 
 /** Map section IDs to icons */
 const sectionIcons: Record<string, React.ReactNode> = {
@@ -46,8 +55,9 @@ const sectionIcons: Record<string, React.ReactNode> = {
 
 export function KodiSettings() {
   const [level, setLevel] = useState<SettingLevel>('standard');
-  const [userSelectedSection, setUserSelectedSection] = useState<string | null>(null);
-  const [userSelectedCategory, setUserSelectedCategory] = useState<string | null>(null);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [viewingSection, setViewingSection] = useState<string | null>(null);
+  const [viewingCategory, setViewingCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const { setItems } = useBreadcrumbs();
@@ -63,27 +73,7 @@ export function KodiSettings() {
     isError: sectionsError,
   } = useKodiSettingSections(level);
 
-  // Compute effective section - use user selection or default to first
-  const selectedSection = useMemo(() => {
-    if (userSelectedSection) return userSelectedSection;
-    return sections?.[0]?.id ?? '';
-  }, [userSelectedSection, sections]);
-
-  const { data: categories, isLoading: categoriesLoading } = useKodiSettingCategories(
-    selectedSection,
-    level
-  );
-
-  // Compute effective category - use user selection or default to first
-  // Reset to null when section changes (userSelectedSection changes)
-  const selectedCategory = useMemo(() => {
-    if (userSelectedCategory) {
-      // Check if category is still valid for current section
-      const isValid = categories?.some((c) => c.id === userSelectedCategory);
-      if (isValid) return userSelectedCategory;
-    }
-    return categories?.[0]?.id ?? '';
-  }, [userSelectedCategory, categories]);
+  const { data: categories } = useKodiSettingCategories(viewingSection ?? '', level);
 
   const {
     data: allSettings,
@@ -93,20 +83,20 @@ export function KodiSettings() {
 
   // Fetch settings filtered by section/category (proper API filtering)
   const { data: categorySettings, isLoading: categorySettingsLoading } = useKodiSettingsByCategory(
-    selectedSection,
-    selectedCategory,
+    viewingSection ?? '',
+    viewingCategory ?? '',
     level
   );
 
-  // Handle section selection - reset category when section changes
-  const handleSectionSelect = (sectionId: string) => {
-    setUserSelectedSection(sectionId);
-    setUserSelectedCategory(null); // Reset category to default to first
+  // Handle expanding/collapsing a section in the sidebar (does not change main content)
+  const handleToggleSection = (sectionId: string, open: boolean) => {
+    setExpandedSection(open ? sectionId : null);
   };
 
-  // Handle category selection
-  const handleCategorySelect = (categoryId: string) => {
-    setUserSelectedCategory(categoryId);
+  // Handle selecting a category (updates main content)
+  const handleSelectCategory = (sectionId: string, categoryId: string) => {
+    setViewingSection(sectionId);
+    setViewingCategory(categoryId);
   };
 
   // Get settings for display - use API-filtered results for category view, client-filtered for search
@@ -114,7 +104,6 @@ export function KodiSettings() {
     let result: KodiSetting[] = [];
 
     if (searchQuery.trim()) {
-      // Search across all settings
       if (!allSettings) return [];
       const query = searchQuery.toLowerCase();
       result = allSettings.filter(
@@ -123,14 +112,13 @@ export function KodiSettings() {
           s.id.toLowerCase().includes(query) ||
           s.help?.toLowerCase().includes(query)
       );
-    } else {
-      // Use API-filtered category settings
+    } else if (viewingCategory) {
       result = categorySettings ?? [];
     }
 
     // Filter out action types (they're typically buttons that trigger dialogs we can't show)
     return result.filter((s) => s.type !== 'action');
-  }, [allSettings, categorySettings, searchQuery]);
+  }, [allSettings, categorySettings, viewingCategory, searchQuery]);
 
   // Loading state depends on which data we're showing
   const settingsLoading = searchQuery.trim() ? allSettingsLoading : categorySettingsLoading;
@@ -224,90 +212,57 @@ export function KodiSettings() {
       ) : (
         // Section / Category navigation
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-          {/* Sidebar - Sections & Categories */}
-          <div className="space-y-4">
-            {/* Sections */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">Sections</CardTitle>
-              </CardHeader>
-              <CardContent className="p-2 pt-0">
-                {sectionsLoading ? (
-                  <div className="space-y-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Skeleton key={i} className="h-9 w-full" />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="space-y-1">
-                    {sections?.map((section) => (
-                      <Button
-                        key={section.id}
-                        variant={selectedSection === section.id ? 'secondary' : 'ghost'}
-                        className="w-full justify-start gap-2"
-                        onClick={() => {
-                          handleSectionSelect(section.id);
-                        }}
-                      >
-                        {sectionIcons[section.id] ?? <Settings className="h-4 w-4" />}
-                        {section.label}
-                      </Button>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Categories */}
-            {selectedSection && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Categories</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                  {categoriesLoading ? (
-                    <div className="space-y-1 p-2">
-                      {Array.from({ length: 4 }).map((_, i) => (
-                        <Skeleton key={i} className="h-9 w-full" />
-                      ))}
-                    </div>
-                  ) : (
-                    <ScrollArea className="h-[300px]">
-                      <div className="p-2">
-                        {categories?.map((category) => (
-                          <Button
-                            key={category.id}
-                            variant={selectedCategory === category.id ? 'secondary' : 'ghost'}
-                            className="w-full justify-start"
-                            onClick={() => {
-                              handleCategorySelect(category.id);
-                            }}
-                          >
-                            <span className="truncate">{category.label}</span>
-                          </Button>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-          </div>
+          {/* Sidebar - Sections with nested Categories */}
+          <Card>
+            <CardContent className="p-2">
+              {sectionsLoading ? (
+                <div className="space-y-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <SidebarMenuSkeleton key={i} showIcon />
+                  ))}
+                </div>
+              ) : (
+                <SidebarMenu>
+                  {sections?.map((section) => (
+                    <SectionItem
+                      key={section.id}
+                      section={section}
+                      level={level}
+                      isOpen={expandedSection === section.id}
+                      selectedCategory={
+                        viewingSection === section.id ? (viewingCategory ?? '') : ''
+                      }
+                      onToggle={(open) => {
+                        handleToggleSection(section.id, open);
+                      }}
+                      onSelectCategory={(categoryId) => {
+                        handleSelectCategory(section.id, categoryId);
+                      }}
+                    />
+                  ))}
+                </SidebarMenu>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Main content - Settings */}
           <Card>
             <CardHeader>
               <CardTitle>
-                {categories?.find((c) => c.id === selectedCategory)?.label ?? 'Settings'}
+                {categories?.find((c) => c.id === viewingCategory)?.label ?? 'Settings'}
               </CardTitle>
-              {selectedCategory && (
+              {viewingCategory && (
                 <CardDescription>
                   {filteredSettings.length} settings in this category
                 </CardDescription>
               )}
             </CardHeader>
             <CardContent className="space-y-3">
-              {settingsLoading ? (
+              {!viewingCategory ? (
+                <p className="text-muted-foreground py-8 text-center">
+                  Select a category to view settings.
+                </p>
+              ) : settingsLoading ? (
                 <SettingsLoadingSkeleton />
               ) : filteredSettings.length === 0 ? (
                 <p className="text-muted-foreground py-8 text-center">
@@ -323,6 +278,62 @@ export function KodiSettings() {
         </div>
       )}
     </div>
+  );
+}
+
+interface SectionItemProps {
+  section: KodiSettingSection;
+  level: SettingLevel;
+  isOpen: boolean;
+  selectedCategory: string;
+  onToggle: (open: boolean) => void;
+  onSelectCategory: (categoryId: string) => void;
+}
+
+function SectionItem({
+  section,
+  level,
+  isOpen,
+  selectedCategory,
+  onToggle,
+  onSelectCategory,
+}: SectionItemProps) {
+  const { data: categories, isLoading } = useKodiSettingCategories(section.id, level);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={onToggle} className="group/collapsible" asChild>
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton>
+            {sectionIcons[section.id] ?? <Settings className="h-4 w-4" />}
+            <span>{section.label}</span>
+            <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {isLoading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <SidebarMenuSubItem key={i}>
+                    <SidebarMenuSkeleton />
+                  </SidebarMenuSubItem>
+                ))
+              : categories?.map((category) => (
+                  <SidebarMenuSubItem key={category.id}>
+                    <SidebarMenuSubButton
+                      isActive={selectedCategory === category.id}
+                      onClick={() => {
+                        onSelectCategory(category.id);
+                      }}
+                    >
+                      <span>{category.label}</span>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
   );
 }
 
