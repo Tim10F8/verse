@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Trigger repository update
         run: |
-          gh api repos/dangerouslaser/repository.dangerouslaser/dispatches \
+          gh api repos/dangerouslaser/dangerouslaser.github.io/dispatches \
             -f event_type=addon-released
         env:
           GH_TOKEN: ${{ secrets.REPO_DISPATCH_TOKEN }}
