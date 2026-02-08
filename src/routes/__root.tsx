@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { lazy } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { AppBreadcrumbs } from '@/components/layout/AppBreadcrumbs';
@@ -14,6 +13,22 @@ import { GlobalSearch } from '@/components/search/GlobalSearch';
 import { SearchTrigger } from '@/components/search/SearchTrigger';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useKodiWebSocket } from '@/api/hooks/useKodiWebSocket';
+
+const ReactQueryDevtools = import.meta.env.PROD
+  ? () => null
+  : lazy(() =>
+      import('@tanstack/react-query-devtools').then((m) => ({
+        default: m.ReactQueryDevtools,
+      }))
+    );
+
+const TanStackRouterDevtools = import.meta.env.PROD
+  ? () => null
+  : lazy(() =>
+      import('@tanstack/router-devtools').then((m) => ({
+        default: m.TanStackRouterDevtools,
+      }))
+    );
 
 const queryClient = new QueryClient({
   defaultOptions: {
