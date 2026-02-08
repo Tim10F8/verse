@@ -1,6 +1,6 @@
 {
   "name": "verse",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A modern, fast, and beautiful web interface for Kodi",
   "type": "module",
   "scripts": {
