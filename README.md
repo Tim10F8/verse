@@ -1,6 +1,6 @@
 # Verse
 
-> What comes after the Chorus
+> After the Chorus
 
 A modern, fast, and beautiful web interface for Kodi
 
